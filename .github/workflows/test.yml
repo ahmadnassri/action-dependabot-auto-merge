@@ -25,6 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2.1.1
+        with:
+          node-version: 14
       - uses: actions/cache@v2
         with:
           path: ~/.npm
