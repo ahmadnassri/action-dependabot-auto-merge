@@ -37,16 +37,50 @@ jobs:
       - run: npm run test:100
 
   release:
-    needs: test
+    needs: dependencies
 
     runs-on: ubuntu-latest
 
+    outputs:
+      published: ${{ steps.release.outputs.published }}
+      release-version: ${{ steps.release.outputs.release-version }}
+      release-version-major: ${{ steps.release.outputs.release-version-major }}
+
     steps:
       - uses: actions/checkout@v2
-
-      # release
-      - name: semantic-release
+      - id: release
+        name: semantic-release
         uses: docker://ahmadnassri/action-semantic-release:v1
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    needs: release
+    if: needs.release.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        docker:
+          - name: docker hub
+            registry: registry.hub.docker.com
+            password: DOCKER_PASSWORD
+            repository: ${{ github.event.repository.full_name }}
+
+          - name: github package registry
+            password: GITHUB_TOKEN
+            registry: docker.pkg.github.com
+            repository: ${{ github.event.repository.full_name }}/${{ github.event.repository.name }}
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: ${{ matrix.docker.name }}
+        uses: docker/build-push-action@v1
+        with:
+          add_git_labels: true
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets[matrix.docker.password] }}
+          registry: ${{ matrix.docker.registry }}
+          repository: ${{ matrix.docker.repository }}
+          tags: latest, v${{ needs.release.outputs.release-version-major }}, ${{ needs.release.outputs.release-version }}
