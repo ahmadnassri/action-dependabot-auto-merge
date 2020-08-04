@@ -1,0 +1,21 @@
+name: Dependabot Auto Merge
+description: Automatically merge Dependabot PRs when version comparison is within range
+
+branding:
+  color: blue
+  icon: git-merge
+
+inputs:
+  github-token:
+    description: The GitHub token used to merge the pull-request
+    default: ${{ github.token }}
+    required: false
+
+  target:
+    description: The version comparison target (major, minor, patch)
+    default: patch
+    required: false
+
+runs:
+  using: docker
+  image: Dockerfile

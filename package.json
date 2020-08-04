@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "name": "actions-dependabot-auto-merge",
+  "version": "0.0.0-semantically-released",
+  "author": {
+    "name": "Ahmad Nassri",
+    "email": "ahmad@ahmadnassri.com",
+    "url": "https://ahmadnassri.com"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "tap test --no-coverage",
+    "test:100": "tap test --100 --coverage-report=lcov --no-browser"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.4",
+    "@octokit/rest": "^18.0.3",
+    "semver": "^7.3.2"
+  },
+  "devDependencies": {
+    "sinon": "^9.0.2",
+    "tap": "^14.10.8"
+  }
+}

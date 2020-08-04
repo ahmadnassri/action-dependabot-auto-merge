@@ -1,0 +1,35 @@
+name: test
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.1
+
+      # run checks
+      - run: npm audit --audit-level=moderate
+      - run: npx updated
+
+  test:
+    needs: dependencies
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.1
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: client-${{ hashFiles('**/package-lock.json') }}
+
+      # run test
+      - run: npm ci
+      - run: npm run test:100

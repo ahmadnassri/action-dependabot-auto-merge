@@ -1,0 +1,50 @@
+name: release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.1
+
+      # run checks
+      - run: npm audit --audit-level=moderate
+      - run: npx updated
+
+  test:
+    needs: dependencies
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.1
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: client-${{ hashFiles('**/package-lock.json') }}
+
+      # run test
+      - run: npm ci
+      - run: npm run test:100
+
+  release:
+    needs: test
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # release
+      - name: semantic-release
+        uses: docker://ahmadnassri/action-semantic-release:v1
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
