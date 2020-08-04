@@ -26,3 +26,23 @@ test('action -> no-token', assert => {
   process.exit.restore()
   core.setFailed.restore()
 })
+
+test('action -> token -> empty string', assert => {
+  assert.plan(3)
+
+  sinon.stub(core, 'setFailed')
+  sinon.stub(process, 'exit')
+
+  process.env.CI = 'true'
+  process.env.GITHUB_EVENT_NAME = 'pull_request'
+  process.env.GITHUB_TOKEN = '  '
+
+  env()
+
+  assert.ok(process.exit.called)
+  assert.equal(process.exit.getCall(0).args[0], 1)
+  assert.equal(core.setFailed.getCall(0).args[0], 'GITHUB_TOKEN required')
+
+  process.exit.restore()
+  core.setFailed.restore()
+})
