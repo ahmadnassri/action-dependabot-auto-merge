@@ -43,7 +43,6 @@ jobs:
 
     outputs:
       published: ${{ steps.release.outputs.published }}
-      release-notes: ${{ steps.release.outputs.release-notes }}
       release-version: ${{ steps.release.outputs.release-version }}
       release-version-major: ${{ steps.release.outputs.release-version-major }}
       release-version-minor: ${{ steps.release.outputs.release-version-minor }}
@@ -67,15 +66,16 @@ jobs:
           - version: v${{ needs.release.outputs.release-version-major }}.${{ needs.release.outputs.release-version-minor }}
 
     steps:
-      - uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ matrix.alias.version }}
-          release_name: ${{ matrix.alias.version }} [alias]
-          body: ${{ needs.release.outputs.release-notes	}}
-          draft: false
-          prerelease: false
+      - uses: actions/github-script@v2
+        script: |
+          github.git.createTag({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag: ${{ matrix.alias.version }},
+            message: 'alias for v${{ needs.release.outputs.release-version }}',
+            object: v${{ needs.release.outputs.release-version }},
+            type: 'commit'
+          })
 
   publish:
     needs: release
