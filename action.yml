@@ -18,7 +18,7 @@ inputs:
 
 runs:
   using: docker
-  image: docker://ahmadnassri/action-dependabot-auto-merge
+  image: docker://ahmadnassri/action-dependabot-auto-merge:v1
   env:
     GITHUB_TOKEN: ${{ inputs.github-token }}
     INPUT_TARGET: ${{ inputs.target }}
