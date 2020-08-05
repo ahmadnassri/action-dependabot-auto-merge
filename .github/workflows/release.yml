@@ -72,7 +72,7 @@ jobs:
             await github.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: v${{ needs.release.outputs.release-version }}
+              ref: 'v${{ needs.release.outputs.release-version }}'
             })
 
             await github.git.createTag({
@@ -80,7 +80,7 @@ jobs:
               repo: context.repo.repo,
               tag: ${{ matrix.alias.version }},
               message: 'alias for v${{ needs.release.outputs.release-version }}',
-              object: v${{ needs.release.outputs.release-version }},
+              object: 'v${{ needs.release.outputs.release-version }}',
               type: 'commit'
             })
 
