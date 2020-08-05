@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  lint:
+    image: github/super-linter:v3
+    volumes:
+      - ./:/tmp/lint
+    environment:
+      RUN_LOCAL: 'true'
+      MULTI_STATUS: 'false'
+
+  test:
+    build: .
+    tty: true
+    volumes:
+      - type: bind
+        source: .
+        target: /action/
+    working_dir: /action
+    entrypoint: ''
+    command: npm run test
