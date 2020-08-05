@@ -67,15 +67,22 @@ jobs:
 
     steps:
       - uses: actions/github-script@v2
-        script: |
-          github.git.createTag({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            tag: ${{ matrix.alias.version }},
-            message: 'alias for v${{ needs.release.outputs.release-version }}',
-            object: v${{ needs.release.outputs.release-version }},
-            type: 'commit'
-          })
+        with:
+          script: |
+            await github.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: v${{ needs.release.outputs.release-version }}
+            })
+
+            await github.git.createTag({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag: ${{ matrix.alias.version }},
+              message: 'alias for v${{ needs.release.outputs.release-version }}',
+              object: v${{ needs.release.outputs.release-version }},
+              type: 'commit'
+            })
 
   publish:
     needs: release
