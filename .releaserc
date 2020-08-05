@@ -26,7 +26,7 @@
           { "type": "perf",     "section": "Performance", "hidden": false },
           { "type": "refactor", "section": "Refactor",    "hidden": false },
           { "type": "style",    "section": "Code Style",  "hidden": false },
-          { "type": "test",     "section": "tests",       "hidden": false }
+          { "type": "test",     "section": "Tests",       "hidden": false }
         ]
       }
     }],
