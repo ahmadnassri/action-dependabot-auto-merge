@@ -36,7 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
-      - uses: actions/checkout@v2
       - uses: ahmadnassri/action-dependabot-auto-merge@v1
 ```
 
@@ -46,7 +45,6 @@ Use a specific user's Personal Access Token:
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
   - uses: ahmadnassri/action-dependabot-auto-merge@v1
     with:
       target: patch
@@ -58,7 +56,6 @@ Only merge if the changed dependency version is a `patch` _(default behavior)_:
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
   - uses: ahmadnassri/action-dependabot-auto-merge@v1
     with:
       target: patch
@@ -68,7 +65,6 @@ Only merge if the changed dependency version is a `minor`:
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
   - uses: ahmadnassri/action-dependabot-auto-merge@v1
     with:
       target: minor
@@ -78,7 +74,6 @@ Only merge if the changed dependency version is a `major`:
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
   - uses: ahmadnassri/action-dependabot-auto-merge@v1
     with:
       target: major
