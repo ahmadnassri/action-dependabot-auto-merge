@@ -37,7 +37,7 @@ jobs:
       - run: npm run test:100
 
   release:
-    needs: dependencies
+    needs: test
 
     runs-on: ubuntu-latest
 
@@ -69,20 +69,14 @@ jobs:
       - uses: actions/github-script@v2
         with:
           script: |
-            await github.git.deleteRef({
+            const tag = 'tags/${{ matrix.alias.version }}'
+            const repo = {
               owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: '${{ matrix.alias.version }}'
-            })
+              repo: context.repo.repo
+            }
 
-            await github.git.createTag({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag: ${{ matrix.alias.version }},
-              message: 'alias for v${{ needs.release.outputs.release-version }}',
-              object: 'v${{ needs.release.outputs.release-version }}',
-              type: 'commit'
-            })
+            await github.git.deleteRef({ ...repo, ref: tag }).catch(() => {})
+            await github.git.createRef({ ...repo, ref: `refs/${tag}` , sha: process.env.GITHUB_SHA })
 
   publish:
     needs: release
