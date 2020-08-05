@@ -1,5 +1,26 @@
 # GitHub Action: Dependabot Auto Merge
 
+[![license][license-img]][license-url]
+[![version][version-img]][version-url]
+[![super linter][super-linter-img]][super-linter-url]
+[![test][test-img]][test-url]
+[![release][release-img]][release-url]
+
+[license-url]: LICENSE
+[license-img]: https://badgen.net/github/license/ahmadnassri/action-dependabot-auto-merge
+
+[version-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/releases
+[version-img]: https://badgen.net//github/release/ahmadnassri/action-dependabot-auto-merge
+
+[super-linter-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Asuper-linter
+[super-linter-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/super-linter/badge.svg
+
+[test-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Atest
+[test-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/test/badge.svg
+
+[release-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Arelease
+[release-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/release/badge.svg
+
 Automatically merge Dependabot PRs when version comparison is within range
 
 ## Usage
