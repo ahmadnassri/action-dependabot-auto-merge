@@ -43,8 +43,10 @@ jobs:
 
     outputs:
       published: ${{ steps.release.outputs.published }}
+      release-notes: ${{ steps.release.outputs.release-notes }}
       release-version: ${{ steps.release.outputs.release-version }}
       release-version-major: ${{ steps.release.outputs.release-version-major }}
+      release-version-minor: ${{ steps.release.outputs.release-version-minor }}
 
     steps:
       - uses: actions/checkout@v2
