@@ -54,6 +54,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - id: release-aliases
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.release.outputs.release-version-major }}
+          release_name: ${{ steps.release.outputs.release-version-major }} [alias]
+          body: ${{ steps.release.outputs.release-notes	}}
+          draft: false
+          prerelease: false
+
   publish:
     needs: release
     if: needs.release.outputs.published == 'true'
