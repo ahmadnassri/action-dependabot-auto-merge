@@ -7,7 +7,7 @@ const parse = require('./lib/parse')
 const approve = require('./lib/approve')
 const comment = require('./lib/comment')
 
-module.exports = async function () {
+async function main () {
   // over write default github token with the input if provided
   if (process.env.INPUT_GITHUB_TOKEN) process.env.GITHUB_TOKEN = process.env.INPUT_GITHUB_TOKEN
 
@@ -39,3 +39,6 @@ module.exports = async function () {
     await comment(octokit, event, `@dependabot ${command}`)
   }
 }
+
+// awaiting top-level await
+main()
