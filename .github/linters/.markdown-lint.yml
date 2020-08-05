@@ -36,7 +36,7 @@ MD012:
 
 # Line length
 MD013:
-  line_length: 300
+  line_length: 180
   strict: true
   stern: true
 
@@ -108,8 +108,7 @@ MD034: true
 
 # Horizontal rule style
 MD035:
-  style: "---"
-
+  style: "----"
 
 # Emphasis used instead of a heading
 MD036:
