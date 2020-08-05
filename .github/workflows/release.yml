@@ -72,7 +72,7 @@ jobs:
             await github.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'v${{ needs.release.outputs.release-version }}'
+              ref: '${{ matrix.alias.version }}'
             })
 
             await github.git.createTag({
