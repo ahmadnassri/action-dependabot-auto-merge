@@ -17,5 +17,5 @@ services:
         source: ./action
         target: /action/
     working_dir: /action
-    entrypoint: ''
-    command: npm run test
+    entrypoint: npm run
+    command: test

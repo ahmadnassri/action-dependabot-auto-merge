@@ -24,10 +24,10 @@ async function main () {
   })
 
   // find context data
-  const data = await readFile(process.env.GITHUB_EVENT_PATH)
+  const contents = await readFile(process.env.GITHUB_EVENT_PATH)
 
   // parse data
-  const event = JSON.parse(data)
+  const event = JSON.parse(contents)
 
   // extract the title
   const { pull_request: { title } } = event

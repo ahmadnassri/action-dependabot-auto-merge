@@ -1,6 +1,3 @@
-// node.js internals
-const { join } = require('path')
-
 // packages
 const { test } = require('tap')
 const sinon = require('sinon')
