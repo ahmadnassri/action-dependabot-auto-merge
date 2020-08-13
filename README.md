@@ -37,6 +37,8 @@ jobs:
     if: github.actor == 'dependabot[bot]'
     steps:
       - uses: ahmadnassri/action-dependabot-auto-merge@v1
+        with:
+          github-token: ${{ github.token }}
 ```
 
 ### Examples
@@ -59,6 +61,7 @@ steps:
   - uses: ahmadnassri/action-dependabot-auto-merge@v1
     with:
       target: patch
+      github-token: ${{ github.token }}
 ```
 
 Only merge if the changed dependency version is a `minor`:
@@ -68,6 +71,7 @@ steps:
   - uses: ahmadnassri/action-dependabot-auto-merge@v1
     with:
       target: minor
+      github-token: ${{ github.token }}
 ```
 
 Only merge if the changed dependency version is a `major`:
@@ -77,11 +81,12 @@ steps:
   - uses: ahmadnassri/action-dependabot-auto-merge@v1
     with:
       target: major
+      github-token: ${{ github.token }}
 ```
 
 ### Inputs
 
-| output         | required | default        | description                                         |
-| -------------- | -------- | -------------- | --------------------------------------------------- |
-| `github-token` | ❌        | `github.token` | The GitHub token used to merge the pull-request     |
-| `target`       | ❌        | `patch` | The version comparison target (major, minor, patch) |
+| output         | required | default        | description                                     |
+| -------------- | -------- | -------------- | ----------------------------------------------- |
+| `github-token` | ✔        | `github.token` | The GitHub token used to merge the pull-request |
+| `target`       | ❌       | `patch` | The version comparison target (major, minor, patch)    |

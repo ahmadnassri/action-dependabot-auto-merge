@@ -8,8 +8,7 @@ branding:
 inputs:
   github-token:
     description: The GitHub token used to merge the pull-request
-    default: ${{ github.token }}
-    required: false
+    required: true
 
   target:
     description: The version comparison target (major, minor, patch)
