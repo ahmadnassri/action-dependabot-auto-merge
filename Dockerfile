@@ -9,8 +9,7 @@ LABEL com.github.actions.name="Dependabot Auto Merge" \
 RUN mkdir /action
 WORKDIR /action
 
-COPY package*.json index.js ./
-COPY lib ./lib
+COPY action ./
 
 RUN npm ci --only=prod
 

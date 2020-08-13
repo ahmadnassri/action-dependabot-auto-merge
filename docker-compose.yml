@@ -14,7 +14,7 @@ services:
     tty: true
     volumes:
       - type: bind
-        source: .
+        source: ./action
         target: /action/
     working_dir: /action
     entrypoint: ''
