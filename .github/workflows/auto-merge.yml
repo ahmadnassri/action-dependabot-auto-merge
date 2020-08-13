@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
     steps:
-      - uses: ahmadnassri/action-dependabot-auto-merge@v1
+      - uses: actions/checkout@v2
+      - name: dogfood
+        uses: ./
         with:
           github-token: ${{ secrets.GH_TOKEN }}
