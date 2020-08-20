@@ -11,11 +11,12 @@
   "license": "MIT",
   "scripts": {
     "test": "tap test --no-coverage",
-    "test:100": "tap test --100 --coverage-report=lcov --no-browser"
+    "test:watch": "tap --watch",
+    "test:100": "tap test --100 --color --coverage-report=lcov --no-browser"
   },
   "dependencies": {
     "@actions/core": "^1.2.4",
-    "@octokit/rest": "^18.0.3",
+    "@actions/github": "^4.0.0",
     "semver": "^7.3.2"
   },
   "devDependencies": {

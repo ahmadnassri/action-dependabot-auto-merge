@@ -8,7 +8,7 @@ branding:
 inputs:
   github-token:
     description: The GitHub token used to merge the pull-request
-    required: true
+    default: ${{ github.token }}
 
   target:
     description: The version comparison target (major, minor, patch)
@@ -18,6 +18,3 @@ inputs:
 runs:
   using: docker
   image: docker://ahmadnassri/action-dependabot-auto-merge:v1
-  env:
-    GITHUB_TOKEN: ${{ inputs.github-token }}
-    INPUT_TARGET: ${{ inputs.target }}
