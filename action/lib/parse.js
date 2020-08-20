@@ -14,8 +14,8 @@ module.exports = function (title, options) {
 
   // exit early
   if (!from || !to || !valid(from.version) || !valid(to.version)) {
-    core.setFailed('failed to parse title: invalid semver')
-    return process.exit(1)
+    core.error('failed to parse title: invalid semver')
+    return process.exit(0) // soft exit
   }
 
   // log
