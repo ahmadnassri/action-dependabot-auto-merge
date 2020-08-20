@@ -4,7 +4,13 @@ const core = require('@actions/core')
 // semver regex
 const semver = /(?<version>(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)/
 
-module.exports = function (title, options) {
+const weight = {
+  major: 3,
+  minor: 2,
+  patch: 1
+}
+
+module.exports = function (title, target) {
   // log
   core.info(`title: "${title}"`)
 
@@ -25,9 +31,10 @@ module.exports = function (title, options) {
   // analyze with semver
   const result = diff(from.version, to.version)
 
-  // if target is a match, tell dependabot to
-  if (options.target === result) {
-    core.info(`dependency update target is ${result}, will auto-merge`)
+  // compare weight to target
+  if ((weight[target] || 0) >= (weight[result] || 0)) {
+    // tell dependabot to merge
+    core.info(`dependency update target is "${target}", found "${result}", will auto-merge`)
     return 'merge'
   }
 

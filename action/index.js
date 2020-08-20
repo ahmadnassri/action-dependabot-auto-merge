@@ -1,7 +1,8 @@
 // packages
 const core = require('@actions/core')
 const github = require('@actions/github')
-// libraries
+
+// modules
 const parse = require('./lib/parse')
 const approve = require('./lib/approve')
 const comment = require('./lib/comment')
@@ -42,7 +43,7 @@ const octokit = github.getOctokit(inputs.token)
 
 async function main () {
   // parse and determine what command to tell dependabot
-  const command = parse(title, { target: inputs.target || 'patch' })
+  const command = parse(title, inputs.target || 'patch')
 
   if (command === 'merge') {
     await approve(octokit, github.context)

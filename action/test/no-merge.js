@@ -11,7 +11,7 @@ test('title -> parse', async assert => {
 
   sinon.stub(core, 'info')
 
-  const command = parse('chore(deps): bump api-problem from 6.1.2 to 7.0.0 in /path', { target: 'patch' })
+  const command = parse('chore(deps): bump api-problem from 6.1.2 to 7.0.0 in /path', 'patch')
 
   assert.ok(core.info.called)
   assert.equal(core.info.getCall(1).args[0], 'from: 6.1.2')
