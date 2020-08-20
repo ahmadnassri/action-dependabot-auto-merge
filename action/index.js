@@ -29,7 +29,13 @@ if (github.context.eventName !== 'pull_request') {
 }
 
 // extract the title
-const { payload: { pull_request: { title } } } = github.context
+const { payload: { sender, pull_request: { title } } } = github.context
+
+// exit early if PR is not by dependabot
+if (sender.login !== 'dependabot[bot]') {
+  core.warning(`expected PR by "dependabot[bot]", found "${sender.login}" instead`)
+  process.exit(0)
+}
 
 // init octokit
 const octokit = github.getOctokit(inputs.token)
