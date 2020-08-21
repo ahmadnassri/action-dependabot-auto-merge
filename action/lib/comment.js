@@ -1,7 +1,7 @@
-module.exports = async function (octokit, context, body) {
+module.exports = async function (octokit, { repo, payload: { pull_request } }, body) { // eslint-disable-line camelcase
   await octokit.issues.createComment({
-    ...context.repo,
-    issue_number: context.pull_request.number,
+    ...repo,
+    issue_number: pull_request.number,
     body
   })
 }
