@@ -1,12 +1,12 @@
-module.exports = async function (octokit, { repo, payload: { pull_request } }) { // eslint-disable-line camelcase
+module.exports = async function (octokit, repo, { number }) {
   const { data: { id } } = await octokit.pulls.createReview({
     ...repo,
-    pull_number: pull_request.number
+    pull_number: number
   })
 
   await octokit.pulls.submitReview({
     ...repo,
-    pull_number: pull_request.number,
+    pull_number: number,
     event: 'APPROVE',
     review_id: id
   })

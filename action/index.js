@@ -30,7 +30,7 @@ if (github.context.eventName !== 'pull_request') {
 }
 
 // extract the title
-const { payload: { sender, pull_request: { title } } } = github.context
+const { payload: { sender, repo, pull_request } } = github.context // eslint-disable-line camelcase
 
 // exit early if PR is not by dependabot
 if (sender.login !== 'dependabot[bot]') {
@@ -43,11 +43,11 @@ const octokit = github.getOctokit(inputs.token)
 
 async function main () {
   // parse and determine what command to tell dependabot
-  const command = parse(title, inputs.target || 'patch')
+  const command = parse(pull_request.title, inputs.target || 'patch')
 
   if (command === 'merge') {
-    await approve(octokit, github.context)
-    await comment(octokit, github.context, `@dependabot ${command}`)
+    await approve(octokit, repo, pull_request)
+    await comment(octokit, repo, pull_request, `@dependabot ${command}`)
   }
 }
 
