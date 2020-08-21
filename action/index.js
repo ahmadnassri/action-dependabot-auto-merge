@@ -30,7 +30,7 @@ if (github.context.eventName !== 'pull_request') {
 }
 
 // extract the title
-const { payload: { sender, repo, pull_request } } = github.context // eslint-disable-line camelcase
+const { repo, payload: { sender, pull_request } } = github.context // eslint-disable-line camelcase
 
 // exit early if PR is not by dependabot
 if (sender.login !== 'dependabot[bot]') {
