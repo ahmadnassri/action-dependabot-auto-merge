@@ -56,7 +56,7 @@ jobs:
           - version: v${{ needs.release.outputs.release-version-major }}.${{ needs.release.outputs.release-version-minor }}
 
     steps:
-      - uses: actions/github-script@v2
+      - uses: actions/github-script@v3
         with:
           script: |
             const tag = 'tags/${{ matrix.alias.version }}'
