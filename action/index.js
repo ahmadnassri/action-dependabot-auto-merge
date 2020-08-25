@@ -13,8 +13,15 @@ const inputs = {
 }
 
 // error handler
-function errorHandler ({ message, stack }) {
+function errorHandler ({ message, stack, request }) {
   core.error(`${message}\n${stack}`)
+
+  // debugging for API calls
+  if (request) {
+    const { method, url, body } = request
+    core.debug(`${method} ${url} ${body}`)
+  }
+
   process.exit(1)
 }
 

@@ -12,7 +12,7 @@ export async function approve (octokit, repo, { number }) {
   })
 }
 
-export async function comment (octokit, repo, { number }, body) { // eslint-disable-line camelcase
+export async function comment (octokit, repo, { number }, body) {
   await octokit.issues.createComment({
     ...repo,
     issue_number: number,
