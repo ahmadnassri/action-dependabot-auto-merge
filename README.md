@@ -79,7 +79,9 @@ steps:
 
 ### Inputs
 
-| output         | required | default        | description                                         |
+| input          | required | default        | description                                         |
 | -------------- | -------- | -------------- | --------------------------------------------------- |
 | `target`       | ❌       | `patch`        | The version comparison target (major, minor, patch) |
 | `github-token` | ❌       | `github.token` | The GitHub token used to merge the pull-request     |
+| `command`      | ❌       | `merge`        | The command to pass to Dependabot      |
+| `approve`      | ❌       | `true`         | Auto-approve pull-requests                          |

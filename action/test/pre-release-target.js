@@ -11,12 +11,12 @@ test('title -> parse', async assert => {
 
   sinon.stub(core, 'info')
 
-  const command = parse('chore(deps): bump api-problem from 6.1.2 to 6.1.4-prerelease in /path', 'preminor')
+  const proceed = parse('chore(deps): bump api-problem from 6.1.2 to 6.1.4-prerelease in /path', 'preminor')
 
+  assert.ok(proceed)
   assert.ok(core.info.called)
   assert.equal(core.info.getCall(2).args[0], 'to: 6.1.4-prerelease')
   assert.equal(core.info.getCall(3).args[0], 'dependency update target is "preminor", found "prepatch", will auto-merge')
-  assert.equal(command, 'merge')
 
   core.info.restore()
 })

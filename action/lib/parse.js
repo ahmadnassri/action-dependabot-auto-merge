@@ -35,8 +35,9 @@ module.exports = function (title, target) {
   if ((weight[target] || 0) >= (weight[result] || 0)) {
     // tell dependabot to merge
     core.info(`dependency update target is "${target}", found "${result}", will auto-merge`)
-    return 'merge'
+    return true
   }
 
   core.info('manual merging required')
+  return false
 }
