@@ -1,12 +1,12 @@
 // packages
-const { test } = require('tap')
-const sinon = require('sinon')
-const core = require('@actions/core')
+import tap from 'tap'
+import sinon from 'sinon'
+import core from '@actions/core'
 
 // module
-const parse = require('../lib/parse')
+import parse from '../../lib/parse.js'
 
-test('title -> fail', assert => {
+tap.test('parse -> invalid semver', assert => {
   assert.plan(3)
 
   sinon.stub(core, 'info') // silence output on terminal

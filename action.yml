@@ -10,6 +10,14 @@ inputs:
     description: The GitHub token used to merge the pull-request
     default: ${{ github.token }}
 
+  command:
+    description: The command to pass to Dependabot as a comment
+    default: merge
+
+  approve:
+    description: Auto-approve pull-requests
+    default: true
+
   target:
     description: The version comparison target (major, minor, patch)
     default: patch

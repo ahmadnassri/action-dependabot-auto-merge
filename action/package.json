@@ -7,12 +7,13 @@
     "email": "ahmad@ahmadnassri.com",
     "url": "https://ahmadnassri.com"
   },
+  "type": "module",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "tap test --no-coverage",
-    "test:watch": "tap --watch",
-    "test:100": "tap test --100 --color --coverage-report=lcov --no-browser"
+    "test": "tap --no-esm --no-coverage",
+    "test:watch": "tap --no-esm --watch",
+    "test:100": "tap --no-esm --100 --color --coverage-report=lcov --no-browser"
   },
   "dependencies": {
     "@actions/core": "^1.2.4",
