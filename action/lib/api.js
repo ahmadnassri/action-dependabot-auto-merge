@@ -1,8 +1,14 @@
 export async function approve (octokit, repo, { number }) {
-  await octokit.pulls.createReview({
+  const { data: { id } } = await octokit.pulls.createReview({
+    ...repo,
+    pull_number: number
+  })
+
+  await octokit.pulls.submitReview({
     ...repo,
     pull_number: number,
-    event: 'APPROVE'
+    event: 'APPROVE',
+    review_id: id
   })
 }
 
