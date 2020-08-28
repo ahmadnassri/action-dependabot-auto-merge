@@ -1,3 +1,6 @@
+// internals
+import { inspect } from 'util'
+
 // packages
 import core from '@actions/core'
 
@@ -18,8 +21,8 @@ function errorHandler ({ message, stack, request }) {
 
   // debugging for API calls
   if (request) {
-    const { method, url, body } = request
-    core.debug(`${method} ${url} ${body}`)
+    const { method, url, body, headers } = request
+    core.debug(`${method} ${url}\n\n${inspect(headers)}\n\n${inspect(body)}`)
   }
 
   process.exit(1)
