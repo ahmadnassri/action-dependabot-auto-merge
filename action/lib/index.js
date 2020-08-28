@@ -28,7 +28,7 @@ export default async function (inputs) {
   const proceed = parse(pull_request.title, inputs.target || 'patch')
 
   if (proceed) {
-    const command = inputs.approve ? approve : comment
+    const command = inputs.approve === 'true' ? approve : comment
 
     await command(octokit, repo, pull_request, `@dependabot ${inputs.command}`)
   }
