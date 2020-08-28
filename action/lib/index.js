@@ -28,8 +28,8 @@ export default async function (inputs) {
   const proceed = parse(pull_request.title, inputs.target || 'patch')
 
   if (proceed) {
-    if (inputs.approve) await approve(octokit, repo, pull_request)
+    const command = inputs.approve ? approve : comment
 
-    await comment(octokit, repo, pull_request, `@dependabot ${inputs.command}`)
+    await command(octokit, repo, pull_request, `@dependabot ${inputs.command}`)
   }
 }
