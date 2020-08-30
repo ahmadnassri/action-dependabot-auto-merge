@@ -32,4 +32,10 @@ function errorHandler ({ message, stack, request }) {
 process.on('unhandledRejection', errorHandler)
 process.on('uncaughtException', errorHandler)
 
-await main(inputs)
+import { execSync } from "child_process";
+
+let output = execSync("ls -la /github/workspace", {encoding: "utf8"});
+console.log("ls -la /github/workspace");
+console.log(output);
+
+// await main(inputs)
