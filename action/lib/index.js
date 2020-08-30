@@ -25,7 +25,11 @@ export default async function (inputs) {
   const octokit = github.getOctokit(inputs.token)
 
   // parse and determine what command to tell dependabot
-  const proceed = parse(pull_request.title, inputs.target || 'patch')
+  const proceed = parse(
+    pull_request.title,
+    pull_request.labels.map(l => l.name),
+    inputs.target
+  )
 
   if (proceed) {
     const command = inputs.approve === 'true' ? approve : comment

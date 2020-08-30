@@ -10,7 +10,7 @@ import main from './lib/index.js'
 // parse inputs
 const inputs = {
   token: core.getInput('github-token', { required: true }),
-  target: core.getInput('target', { required: true }),
+  target: core.getInput('target', { required: false }),
   command: core.getInput('command', { required: false }),
   approve: core.getInput('approve', { required: false })
 }
