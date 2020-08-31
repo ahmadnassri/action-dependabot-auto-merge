@@ -16,8 +16,12 @@ const securityRegEx = /(^|: )\[Security\]/i
 const ghWorkspace = process.env.GITHUB_WORKSPACE || "/github/workspace";
 
 const weight = {
-  major: 3,
-  minor: 2,
+  premajor: 6,
+  major: 5,
+  preminor: 4,
+  minor: 3,
+  prepatch: 2,
+  prerelease: 2, // equal to prepatch
   patch: 1
 }
 

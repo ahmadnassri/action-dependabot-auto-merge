@@ -113,6 +113,7 @@ automerged_updates:
     # - "in_range" (NOT SUPPORTED YET)
     #   matching the version requirement in your package manifest
     # - "all"
+    # To allow prereleases, the corresponding prepatch, preminor and premajor types are also supported
 - match:
     dependency_type: "production"
     update_type: "security:minor" # includes patch updates!

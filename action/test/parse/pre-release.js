@@ -35,3 +35,48 @@ tap.test('parse -> pre-release -> greater match', async assert => {
 
   core.info.restore()
 })
+
+tap.test('parse -> pre-release -> lesser match (premajor)', async assert => {
+  assert.plan(4)
+
+  sinon.stub(core, 'info')
+
+  const proceed = parse('chore(deps): bump api-problem from 6.1.2 to 7.0.0-pre.0 in /path', [], 'minor')
+
+  assert.notOk(proceed, false)
+  assert.ok(core.info.called)
+  assert.equal(core.info.getCall(3).args[0], 'to: 7.0.0-pre.0')
+  assert.equal(core.info.getCall(7).args[0], 'manual merging required')
+
+  core.info.restore()
+})
+
+tap.test('parse -> pre-release -> lesser match (preminor)', async assert => {
+  assert.plan(4)
+
+  sinon.stub(core, 'info')
+
+  const proceed = parse('chore(deps): bump api-problem from 6.1.2 to 6.2.0-pre.1 in /path', [], 'patch')
+
+  assert.notOk(proceed, false)
+  assert.ok(core.info.called)
+  assert.equal(core.info.getCall(3).args[0], 'to: 6.2.0-pre.1')
+  assert.equal(core.info.getCall(7).args[0], 'manual merging required')
+
+  core.info.restore()
+})
+
+tap.test('parse -> pre-release -> actual prerelease', async assert => {
+  assert.plan(4)
+
+  sinon.stub(core, 'info')
+
+  const proceed = parse('chore(deps): bump api-problem from 6.1.2-pre.0 to 6.1.2-pre.1 in /path', [], 'patch')
+
+  assert.notOk(proceed, false)
+  assert.ok(core.info.called)
+  assert.equal(core.info.getCall(3).args[0], 'to: 6.1.2-pre.1')
+  assert.equal(core.info.getCall(7).args[0], 'manual merging required')
+
+  core.info.restore()
+})
