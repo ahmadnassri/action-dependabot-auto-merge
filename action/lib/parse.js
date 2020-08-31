@@ -13,13 +13,15 @@ const devDependencyRegEx = /\((deps-dev)\):/
 const dependencyRegEx = /\((deps)\):/
 const securityRegEx = /(^|: )\[Security\]/i
 
+const ghWorkspace = process.env.GITHUB_WORKSPACE || "/github/workspace";
+
 const weight = {
   major: 3,
   minor: 2,
   patch: 1
 }
 
-export default function (title, labels, target) {
+export default function (title, labels = [], target) {
   // log
   core.info(`title: "${title}"`)
 
@@ -50,7 +52,7 @@ export default function (title, labels, target) {
   if (!isDev && !isProd) {
     // couldn't extract the dependency type from the title, try to read package.json
     try {
-      const packageJsonPath = path.join(process.env.GITHUB_WORKSPACE, 'package.json')
+      const packageJsonPath = path.join(ghWorkspace, 'package.json')
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
       isDev = depName in packageJson.devDependencies
       isProd = depName in packageJson.dependencies
@@ -71,7 +73,7 @@ export default function (title, labels, target) {
   core.info(`security critical: ${isSecurity}`)
 
   // convert target to the automerged_updates syntax
-  const configPath = path.join(process.env.GITHUB_WORKSPACE, '.github/auto-merge.yml')
+  const configPath = path.join(ghWorkspace, '.github/auto-merge.yml')
   let mergeConfig;
   if (fs.existsSync(configPath)) {
     // parse .github/auto-merge.yml
@@ -110,7 +112,7 @@ export default function (title, labels, target) {
         if (secOrSemver === "security" && !isSecurity) continue;
         if ((weight[maxType] || 0) >= (weight[updateType] || 0)) {
           // tell dependabot to merge
-          core.info(`${dependency_type} dependency update ${update_type} allowed, got ${isSecurity ? "security" : "semver"}:${updateType}, will auto-merge`);
+          core.info(`${dependency_type} dependency update${dependency_type === "all" ? "s" : ""} ${update_type} allowed, got ${isSecurity ? "security" : "semver"}:${updateType}, will auto-merge`);
           return true;
         }
       }
