@@ -58,8 +58,8 @@ export default function (title, labels = [], target) {
     try {
       const packageJsonPath = path.join(ghWorkspace, 'package.json')
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-      isDev = depName in packageJson.devDependencies
-      isProd = depName in packageJson.dependencies
+      isDev = !!packageJson.devDependencies && depName in packageJson.devDependencies
+      isProd = !!packageJson.dependencies && depName in packageJson.dependencies
     } catch (e) {
       console.dir(e);
      }
