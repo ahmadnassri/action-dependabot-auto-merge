@@ -16,6 +16,7 @@ const securityRegEx = /(^|: )\[Security\]/i
 const ghWorkspace = process.env.GITHUB_WORKSPACE || "/github/workspace";
 
 const weight = {
+  all: 1000,
   premajor: 6,
   major: 5,
   preminor: 4,
@@ -112,7 +113,6 @@ export default function (title, labels = [], target) {
       } else if (update_type.includes(":")) {
         // security:patch, semver:minor, ...
         const [secOrSemver, maxType] = update_type.split(":", 2);
-        console.log(maxType);
         if (secOrSemver === "security" && !isSecurity) continue;
         if ((weight[maxType] || 0) >= (weight[updateType] || 0)) {
           // tell dependabot to merge

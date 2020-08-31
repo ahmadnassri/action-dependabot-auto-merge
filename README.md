@@ -112,6 +112,7 @@ automerged_updates:
     #   SemVer minor update, e.g. > 1.x && 2.1.4 to 2.3.1
     # - "in_range" (NOT SUPPORTED YET)
     #   matching the version requirement in your package manifest
+    # - "security:all"
     # - "all"
     # To allow prereleases, the corresponding prepatch, preminor and premajor types are also supported
 - match:
