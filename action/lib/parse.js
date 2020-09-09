@@ -2,7 +2,7 @@ import semver from 'semver'
 import core from '@actions/core'
 import path from 'path'
 import fs from 'fs'
-import yaml from 'js-yaml';
+import { ghWorkspace } from './shared.js'
 
 // semver regex
 const semverRegEx = /(?<version>(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)/
@@ -12,7 +12,6 @@ const depNameRegex = /(?<name>(?:@[^\s]+\/)?[^\s]+) from/
 const devDependencyRegEx = /\((deps-dev)\):/
 const securityRegEx = /(^|: )\[Security\]/i
 
-const ghWorkspace = process.env.GITHUB_WORKSPACE || "/github/workspace";
 
 const weight = {
   all: 1000,
@@ -25,7 +24,7 @@ const weight = {
   patch: 1
 }
 
-export default function (title, labels = [], target) {
+export default function (title, labels = [], mergeConfig = []) {
   // log
   core.info(`title: "${title}"`)
 
@@ -57,7 +56,6 @@ export default function (title, labels = [], target) {
   const packageJsonPath = path.join(ghWorkspace, 'package.json')
   if (fs.existsSync(packageJsonPath)) {
     try {
-      const packageJsonPath = path.join(ghWorkspace, 'package.json')
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
       if (packageJson.devDependencies && depName in packageJson.devDependencies) {
         // This is definitely a devDependency
@@ -82,21 +80,6 @@ export default function (title, labels = [], target) {
   core.info(`to: ${to.version}`)
   core.info(`dependency type: ${isProd ? "production" : "development"}`)
   core.info(`security critical: ${isSecurity}`)
-
-  // convert target to the automerged_updates syntax
-  const configPath = path.join(ghWorkspace, '.github', 'auto-merge.yml')
-  let mergeConfig;
-  if (fs.existsSync(configPath)) {
-    // parse .github/auto-merge.yml
-    const mergeConfigYaml = fs.readFileSync(configPath, 'utf8')
-    mergeConfig = yaml.safeLoad(mergeConfigYaml);
-    core.info('loaded merge config: \n' + mergeConfigYaml);
-  } else {
-    mergeConfig = [
-      { match: { dependency_type: "all", update_type: `semver:${target}` } },
-    ];
-    core.info('target converted to equivalent config: ' + JSON.stringify(mergeConfig, undefined, 4));
-  }
 
   // analyze with semver
   const updateType = semver.diff(from.version, to.version)

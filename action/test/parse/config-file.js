@@ -3,7 +3,7 @@ import tap from 'tap'
 
 import sinon from 'sinon'
 import core from '@actions/core'
-import fs from 'fs'
+import yaml from 'js-yaml';
 
 // module
 import parse from '../../lib/parse.js'
@@ -116,23 +116,18 @@ const tests = [
   },
 ];
 
-const mergeConfigExistsPackageJsonDoesNot = path => !path.endsWith("package.json");
-
 for (const test of tests) {
   tap.test(`compound merge configs in config files --> ${test.name}`, async assert => {
     sinon.stub(core, 'info')
-    // Ensure .github/auto-merge.yml exists in tests
-    sinon.stub(fs, 'readFileSync').returns(test.config)
-    sinon.stub(fs, 'existsSync').callsFake(mergeConfigExistsPackageJsonDoesNot)
+
+    const mergeConfig = yaml.safeLoad(test.config);
 
     if (test.throws === true) {
-      assert.throws(() => parse(test.title));
+      assert.throws(() => parse(test.title, [], mergeConfig));
     } else {
-      assert.equal(parse(test.title), test.expect);
+      assert.equal(parse(test.title, [], mergeConfig), test.expect);
     }
 
     core.info.restore()
-    fs.readFileSync.restore()
-    fs.existsSync.restore()
   });
 }

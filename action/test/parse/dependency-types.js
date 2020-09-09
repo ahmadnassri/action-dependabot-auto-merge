@@ -6,6 +6,7 @@ import fs from 'fs'
 
 // module
 import parse from '../../lib/parse.js'
+import { targetToMergeConfig } from '../../lib/shared.js'
 
 const fakePackageJson = JSON.stringify({
   dependencies: {
@@ -17,16 +18,15 @@ const fakePackageJsonDev = JSON.stringify({
     "api-problem": "6.1.2",
   }
 });
-const packageJsonExistsMergeConfigDoesNot = path => path.endsWith("package.json");
 
 tap.test('title -> security tag is detected', async assert => {
   assert.plan(3)
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
-  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
+  sinon.stub(fs, 'existsSync').returns(true)
 
-  const proceed = parse('[Security] bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
+  const proceed = parse('[Security] bump api-problem from 6.1.2 to 6.1.4 in /path', [], targetToMergeConfig('major'))
 
   assert.ok(proceed)
   assert.ok(core.info.called)
@@ -42,9 +42,9 @@ tap.test('title -> security tag is detected (conventional commits)', async asser
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
-  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
+  sinon.stub(fs, 'existsSync').returns(true)
 
-  const proceed = parse('chore(deps): [security] bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
+  const proceed = parse('chore(deps): [security] bump api-problem from 6.1.2 to 6.1.4 in /path', [], targetToMergeConfig('major'))
 
   assert.ok(proceed)
   assert.ok(core.info.called)
@@ -60,9 +60,9 @@ tap.test('labels -> security tag is detected', async assert => {
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
-  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
+  sinon.stub(fs, 'existsSync').returns(true)
 
-  const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', ['security'], 'major')
+  const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', ['security'], targetToMergeConfig('major'))
 
   assert.ok(proceed)
   assert.ok(core.info.called)
@@ -78,9 +78,9 @@ tap.test('labels -> not security-critical update is detected', async assert => {
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
-  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
+  sinon.stub(fs, 'existsSync').returns(true)
 
-  const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
+  const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], targetToMergeConfig('major'))
 
   assert.ok(proceed)
   assert.ok(core.info.called)
@@ -97,7 +97,7 @@ tap.test('title -> dependency is detected as dev dependency (title fallback)', a
   sinon.stub(core, 'info')
   sinon.stub(fs, 'existsSync').returns(false)
 
-  const proceed = parse('chore(deps-dev): bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
+  const proceed = parse('chore(deps-dev): bump api-problem from 6.1.2 to 6.1.4 in /path', [], targetToMergeConfig('major'))
 
   assert.ok(proceed)
   assert.ok(core.info.called)
@@ -113,7 +113,7 @@ tap.test('title -> dependency is detected as production dependency (title fallba
   sinon.stub(core, 'info')
   sinon.stub(fs, 'existsSync').returns(false)
 
-  const proceed = parse('chore(deps): bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
+  const proceed = parse('chore(deps): bump api-problem from 6.1.2 to 6.1.4 in /path', [], targetToMergeConfig('major'))
 
   assert.ok(proceed)
   assert.ok(core.info.called)
@@ -128,9 +128,9 @@ tap.test('title -> dependency is detected as dev dependency (package.json)', asy
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJsonDev)
-  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
+  sinon.stub(fs, 'existsSync').returns(true)
 
-  const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
+  const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], targetToMergeConfig('major'))
 
   assert.ok(proceed)
   assert.ok(core.info.called)
@@ -146,9 +146,9 @@ tap.test('title -> dependency is detected as production dependency (package.json
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
-  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
+  sinon.stub(fs, 'existsSync').returns(true)
 
-  const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
+  const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], targetToMergeConfig('major'))
 
   assert.ok(proceed)
   assert.ok(core.info.called)
