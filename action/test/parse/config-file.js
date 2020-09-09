@@ -116,12 +116,14 @@ const tests = [
   },
 ];
 
+const mergeConfigExistsPackageJsonDoesNot = path => !path.endsWith("package.json");
+
 for (const test of tests) {
   tap.test(`compound merge configs in config files --> ${test.name}`, async assert => {
     sinon.stub(core, 'info')
     // Ensure .github/auto-merge.yml exists in tests
     sinon.stub(fs, 'readFileSync').returns(test.config)
-    sinon.stub(fs, 'existsSync').returns(true)
+    sinon.stub(fs, 'existsSync').callsFake(mergeConfigExistsPackageJsonDoesNot)
 
     if (test.throws === true) {
       assert.throws(() => parse(test.title));

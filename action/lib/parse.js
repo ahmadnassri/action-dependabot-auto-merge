@@ -50,22 +50,29 @@ export default function (title, labels = [], target) {
     return process.exit(0) // soft exit
   }
 
-  let isDev = devDependencyRegEx.test(title);
-  let isProd = dependencyRegEx.test(title);
   const isSecurity = securityRegEx.test(title) || labels.includes("security");
+  let isProd;
 
-  if (!isDev && !isProd) {
-    // couldn't extract the dependency type from the title, try to read package.json
+  // Look at possible package files to determine the dependency type
+  // For now, this only includes npm
+  const packageJsonPath = path.join(ghWorkspace, 'package.json')
+  if (fs.existsSync(packageJsonPath)) {
     try {
       const packageJsonPath = path.join(ghWorkspace, 'package.json')
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-      isDev = packageJson.devDependencies && depName in packageJson.devDependencies
-      isProd = packageJson.dependencies && depName in packageJson.dependencies
+      if (packageJson.devDependencies && depName in packageJson.devDependencies) {
+        // This is definitely a devDependency
+        isProd = false;
+      }
     } catch (e) {
-      core.debug(e);
-     }
+      core.debug(String(e));
+    }
   }
-  if (!isDev && !isProd) {
+  // If we could not determine the dependency type from package files, fall back to title parsing
+  if (isProd === undefined && devDependencyRegEx.test(title)) {
+    isProd = false;
+  }
+  if (isProd === undefined) {
     // we failed again, assume its a production dependency
     core.info(`failed to parse dependency type, assuming it is a production dependency`)
     isProd = true
@@ -74,7 +81,7 @@ export default function (title, labels = [], target) {
   // log
   core.info(`from: ${from.version}`)
   core.info(`to: ${to.version}`)
-  core.info(`dependency type: ${isDev ? "development" : isProd ? "production" : "unknown"}`)
+  core.info(`dependency type: ${isProd ? "production" : "development"}`)
   core.info(`security critical: ${isSecurity}`)
 
   // convert target to the automerged_updates syntax
@@ -100,7 +107,7 @@ export default function (title, labels = [], target) {
     if (
       dependency_type === "all" ||
       (dependency_type === "production" && isProd) ||
-      (dependency_type === "development" && isDev)
+      (dependency_type === "development" && !isProd)
     ) {
       if (update_type === "all") {
         core.info(`all ${dependency_type} updates allowed, will auto-merge`);

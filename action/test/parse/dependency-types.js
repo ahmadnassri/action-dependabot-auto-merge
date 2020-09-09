@@ -17,21 +17,24 @@ const fakePackageJsonDev = JSON.stringify({
     "api-problem": "6.1.2",
   }
 });
+const packageJsonExistsMergeConfigDoesNot = path => path.endsWith("package.json");
 
 tap.test('title -> security tag is detected', async assert => {
   assert.plan(3)
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
+  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
 
   const proceed = parse('[Security] bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
 
   assert.ok(proceed)
   assert.ok(core.info.called)
-  assert.equal(core.info.getCall(5).args[0], 'security critical: true')
+  assert.equal(core.info.getCall(6).args[0], 'security critical: true')
 
   core.info.restore()
   fs.readFileSync.restore()
+  fs.existsSync.restore()
 })
 
 tap.test('title -> security tag is detected (conventional commits)', async assert => {
@@ -39,15 +42,17 @@ tap.test('title -> security tag is detected (conventional commits)', async asser
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
+  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
 
   const proceed = parse('chore(deps): [security] bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
 
   assert.ok(proceed)
   assert.ok(core.info.called)
-  assert.equal(core.info.getCall(5).args[0], 'security critical: true')
+  assert.equal(core.info.getCall(6).args[0], 'security critical: true')
 
   core.info.restore()
   fs.readFileSync.restore()
+  fs.existsSync.restore()
 })
 
 tap.test('labels -> security tag is detected', async assert => {
@@ -55,15 +60,17 @@ tap.test('labels -> security tag is detected', async assert => {
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
+  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
 
   const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', ['security'], 'major')
 
   assert.ok(proceed)
   assert.ok(core.info.called)
-  assert.equal(core.info.getCall(5).args[0], 'security critical: true')
+  assert.equal(core.info.getCall(6).args[0], 'security critical: true')
 
   core.info.restore()
   fs.readFileSync.restore()
+  fs.existsSync.restore()
 })
 
 tap.test('labels -> not security-critical update is detected', async assert => {
@@ -71,21 +78,24 @@ tap.test('labels -> not security-critical update is detected', async assert => {
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
+  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
 
   const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
 
   assert.ok(proceed)
   assert.ok(core.info.called)
-  assert.equal(core.info.getCall(5).args[0], 'security critical: false')
+  assert.equal(core.info.getCall(6).args[0], 'security critical: false')
 
   core.info.restore()
   fs.readFileSync.restore()
+  fs.existsSync.restore()
 })
 
-tap.test('title -> dependency is detected as dev dependency', async assert => {
+tap.test('title -> dependency is detected as dev dependency (title fallback)', async assert => {
   assert.plan(3)
 
   sinon.stub(core, 'info')
+  sinon.stub(fs, 'existsSync').returns(false)
 
   const proceed = parse('chore(deps-dev): bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
 
@@ -94,27 +104,31 @@ tap.test('title -> dependency is detected as dev dependency', async assert => {
   assert.equal(core.info.getCall(4).args[0], 'dependency type: development')
 
   core.info.restore()
+  fs.existsSync.restore()
 })
 
-tap.test('title -> dependency is detected as production dependency', async assert => {
+tap.test('title -> dependency is detected as production dependency (title fallback)', async assert => {
   assert.plan(3)
 
   sinon.stub(core, 'info')
+  sinon.stub(fs, 'existsSync').returns(false)
 
   const proceed = parse('chore(deps): bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
 
   assert.ok(proceed)
   assert.ok(core.info.called)
-  assert.equal(core.info.getCall(4).args[0], 'dependency type: production')
+  assert.equal(core.info.getCall(5).args[0], 'dependency type: production')
 
   core.info.restore()
+  fs.existsSync.restore()
 })
 
-tap.test('title -> dependency is detected as dev dependency (package.json fallback)', async assert => {
+tap.test('title -> dependency is detected as dev dependency (package.json)', async assert => {
   assert.plan(3)
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJsonDev)
+  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
 
   const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
 
@@ -124,20 +138,23 @@ tap.test('title -> dependency is detected as dev dependency (package.json fallba
 
   core.info.restore()
   fs.readFileSync.restore()
+  fs.existsSync.restore()
 })
 
-tap.test('title -> dependency is detected as production dependency (package.json fallback)', async assert => {
+tap.test('title -> dependency is detected as production dependency (package.json)', async assert => {
   assert.plan(3)
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'readFileSync').returns(fakePackageJson)
+  sinon.stub(fs, 'existsSync').callsFake(packageJsonExistsMergeConfigDoesNot)
 
   const proceed = parse('Bump api-problem from 6.1.2 to 6.1.4 in /path', [], 'major')
 
   assert.ok(proceed)
   assert.ok(core.info.called)
-  assert.equal(core.info.getCall(4).args[0], 'dependency type: production')
+  assert.equal(core.info.getCall(5).args[0], 'dependency type: production')
 
   core.info.restore()
   fs.readFileSync.restore()
+  fs.existsSync.restore()
 })
