@@ -7,7 +7,7 @@ import yaml from 'js-yaml';
 // semver regex
 const semverRegEx = /(?<version>(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)/
 // regex to detect dependency name
-const depNameRegex = /((?:@[^\s]+\/)?[^\s]+) from/
+const depNameRegex = /(?<name>(?:@[^\s]+\/)?[^\s]+) from/
 // regexes to detect dependency type from PR title
 const devDependencyRegEx = /\((deps-dev)\):/
 const dependencyRegEx = /\((deps)\):/
@@ -31,7 +31,7 @@ export default function (title, labels = [], target) {
   core.info(`title: "${title}"`)
 
   // extract dep name from the title
-  const depName = title.match(depNameRegex)?.[1];
+  const depName = title.match(depNameRegex)?.groups.name;
   core.info(`depName: ${depName}`)
 
   // exit early
@@ -52,17 +52,17 @@ export default function (title, labels = [], target) {
 
   let isDev = devDependencyRegEx.test(title);
   let isProd = dependencyRegEx.test(title);
-  const isSecurity = securityRegEx.test(title) || labels.includes("security") || labels.includes("Security");
+  const isSecurity = securityRegEx.test(title) || labels.includes("security");
 
   if (!isDev && !isProd) {
     // couldn't extract the dependency type from the title, try to read package.json
     try {
       const packageJsonPath = path.join(ghWorkspace, 'package.json')
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-      isDev = !!packageJson.devDependencies && depName in packageJson.devDependencies
-      isProd = !!packageJson.dependencies && depName in packageJson.dependencies
+      isDev = packageJson.devDependencies && depName in packageJson.devDependencies
+      isProd = packageJson.dependencies && depName in packageJson.dependencies
     } catch (e) {
-      console.dir(e);
+      core.debug(e);
      }
   }
   if (!isDev && !isProd) {
@@ -78,18 +78,17 @@ export default function (title, labels = [], target) {
   core.info(`security critical: ${isSecurity}`)
 
   // convert target to the automerged_updates syntax
-  const configPath = path.join(ghWorkspace, '.github/auto-merge.yml')
+  const configPath = path.join(ghWorkspace, '.github', 'auto-merge.yml')
   let mergeConfig;
   if (fs.existsSync(configPath)) {
     // parse .github/auto-merge.yml
-    mergeConfig = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-    core.info('loaded merge config: ' + JSON.stringify(mergeConfig, undefined, 4));
+    const mergeConfigYaml = fs.readFileSync(configPath, 'utf8')
+    mergeConfig = yaml.safeLoad(mergeConfigYaml);
+    core.info('loaded merge config: \n' + mergeConfigYaml);
   } else {
-    mergeConfig = {
-      automerged_updates: [
-        { match: { dependency_type: "all", update_type: `semver:${target}` } },
-      ],
-    };
+    mergeConfig = [
+      { match: { dependency_type: "all", update_type: `semver:${target}` } },
+    ];
     core.info('target converted to equivalent config: ' + JSON.stringify(mergeConfig, undefined, 4));
   }
 
@@ -97,9 +96,7 @@ export default function (title, labels = [], target) {
   const updateType = semver.diff(from.version, to.version)
 
   // Check all defined automerge configs to see if one matches
-  for (const {
-    match: { dependency_type, update_type },
-  } of mergeConfig.automerged_updates) {
+  for (const { match: { dependency_type, update_type } } of mergeConfig) {
     if (
       dependency_type === "all" ||
       (dependency_type === "production" && isProd) ||

@@ -95,7 +95,6 @@ Using the configuration file `.github/auto-merge.yml`, you have the option to pr
 * minor security-critical production dependency updates
 
 ```yml
-automerged_updates:
 - match:
     dependency_type: "development"
     # Supported dependency types:

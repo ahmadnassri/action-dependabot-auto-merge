@@ -9,7 +9,6 @@ import fs from 'fs'
 import parse from '../../lib/parse.js'
 
 const configAllPatchSecMinor = `
-automerged_updates:
 - match:
     dependency_type: "all"
     update_type: "semver:patch"
@@ -19,7 +18,6 @@ automerged_updates:
 `
 
 const configAllPatchDevSecAll = `
-automerged_updates:
 - match:
     dependency_type: "all"
     update_type: "semver:patch"
@@ -29,7 +27,6 @@ automerged_updates:
 `
 
 const configProdPatchDevMajor = `
-automerged_updates:
 - match:
     dependency_type: "production"
     update_type: "semver:patch"
@@ -39,7 +36,6 @@ automerged_updates:
 `
 
 const configInRange = `
-automerged_updates:
 - match:
     dependency_type: "all"
     update_type: "in_range"

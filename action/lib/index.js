@@ -27,7 +27,7 @@ export default async function (inputs) {
   // parse and determine what command to tell dependabot
   const proceed = parse(
     pull_request.title,
-    pull_request.labels.map(l => l.name),
+    pull_request.labels.map(l => l.name.toLowerCase()),
     inputs.target
   )
 
