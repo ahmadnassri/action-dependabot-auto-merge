@@ -10,7 +10,6 @@ const semverRegEx = /(?<version>(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<p
 const depNameRegex = /(?<name>(?:@[^\s]+\/)?[^\s]+) from/
 // regexes to detect dependency type from PR title
 const devDependencyRegEx = /\((deps-dev)\):/
-const dependencyRegEx = /\((deps)\):/
 const securityRegEx = /(^|: )\[Security\]/i
 
 const ghWorkspace = process.env.GITHUB_WORKSPACE || "/github/workspace";
