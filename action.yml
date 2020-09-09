@@ -25,4 +25,4 @@ inputs:
 
 runs:
   using: docker
-  image: Dockerfile
+  image: docker://ahmadnassri/action-dependabot-auto-merge:v2
