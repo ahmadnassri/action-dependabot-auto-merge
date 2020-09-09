@@ -11,9 +11,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "tap --no-esm --no-coverage",
-    "test:watch": "tap --no-esm --watch",
-    "test:100": "tap --no-esm --100 --color --coverage-report=lcov --no-browser"
+    "test": "tap test --no-esm --no-coverage",
+    "test:watch": "tap test --no-esm --watch",
+    "test:100": "tap test --no-esm --100 --color --coverage-report=lcov --no-browser"
   },
   "dependencies": {
     "@actions/core": "^1.2.4",

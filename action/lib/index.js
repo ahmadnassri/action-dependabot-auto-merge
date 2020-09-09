@@ -1,13 +1,14 @@
+// packages
 import core from '@actions/core'
 import github from '@actions/github'
 
 // modules
 import parse from './parse.js'
+import config from './config.js'
+import dependencies from './dependencies.js'
 import { approve, comment } from './api.js'
-import yaml from 'js-yaml';
-import { ghWorkspace, targetToMergeConfig } from './shared.js';
-import path from 'path'
-import fs from 'fs'
+
+const workspace = process.env.GITHUB_WORKSPACE || '/github/workspace'
 
 export default async function (inputs) {
   // exit early
@@ -28,26 +29,13 @@ export default async function (inputs) {
   // init octokit
   const octokit = github.getOctokit(inputs.token)
 
-  // read auto-merge.yml to determine what should be merged
-  const configPath = path.join(ghWorkspace, '.github', 'auto-merge.yml')
-  let mergeConfig;
-  if (fs.existsSync(configPath)) {
-    // parse .github/auto-merge.yml
-    const mergeConfigYaml = fs.readFileSync(configPath, 'utf8')
-    mergeConfig = yaml.safeLoad(mergeConfigYaml);
-    core.info('loaded merge config: \n' + mergeConfigYaml);
-  } else {
-    // or convert the input "target" to the equivalent config
-    mergeConfig = targetToMergeConfig(inputs.target);
-    core.info('target converted to equivalent config: ' + JSON.stringify(mergeConfig, undefined, 4));
-  }
-
   // parse and determine what command to tell dependabot
-  const proceed = parse(
-    pull_request.title,
-    pull_request.labels.map(l => l.name.toLowerCase()),
-    mergeConfig
-  )
+  const proceed = parse({
+    title: pull_request.title,
+    labels: pull_request.labels.map(label => label.name.toLowerCase()),
+    config: config({ workspace, target: inputs.target }),
+    dependencies: dependencies(workspace)
+  })
 
   if (proceed) {
     const command = inputs.approve === 'true' ? approve : comment

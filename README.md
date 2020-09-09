@@ -96,11 +96,11 @@ Using the configuration file `.github/auto-merge.yml`, you have the option to pr
 
 ```yml
 - match:
-    dependency_type: "development"
+    dependency_type: development
     # Supported dependency types:
-    # - "development"
-    # - "production"
-    # - "all"
+    # - development
+    # - production
+    # - all
     update_type: "semver:minor" # includes patch updates!
     # Supported updates to automerge:
     # - "security:patch"
@@ -115,11 +115,11 @@ Using the configuration file `.github/auto-merge.yml`, you have the option to pr
     # - "all"
     # To allow prereleases, the corresponding prepatch, preminor and premajor types are also supported
 - match:
-    dependency_type: "production"
+    dependency_type: production
     update_type: "security:minor" # includes patch updates!
 - match:
-    dependency_type: "production"
+    dependency_type: production
     update_type: "semver:patch"
 ```
 
-The syntax is based on https://dependabot.com/docs/config-file/#automerged_updates, but does not support `dependency_name` and `in_range` yet.
+The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates), but does not support `dependency_name` and `in_range` yet.
