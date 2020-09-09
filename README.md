@@ -85,3 +85,41 @@ steps:
 | `github-token` | ❌       | `github.token` | The GitHub token used to merge the pull-request     |
 | `command`      | ❌       | `merge`        | The command to pass to Dependabot                   |
 | `approve`      | ❌       | `true`         | Auto-approve pull-requests                          |
+
+### Configuration file syntax
+
+Using the configuration file `.github/auto-merge.yml`, you have the option to provide a more fine-grained configuration. The following example configuration file merges
+
+* minor development dependency updates
+* patch production dependency updates
+* minor security-critical production dependency updates
+
+```yml
+- match:
+    dependency_type: development
+    # Supported dependency types:
+    # - development
+    # - production
+    # - all
+    update_type: "semver:minor" # includes patch updates!
+    # Supported updates to automerge:
+    # - "security:patch"
+    #   SemVer patch update that fixes a known security vulnerability
+    # - "semver:patch"
+    #   SemVer patch update, e.g. > 1.x && 1.0.1 to 1.0.3
+    # - "semver:minor"
+    #   SemVer minor update, e.g. > 1.x && 2.1.4 to 2.3.1
+    # - "in_range" (NOT SUPPORTED YET)
+    #   matching the version requirement in your package manifest
+    # - "security:all"
+    # - "all"
+    # To allow prereleases, the corresponding prepatch, preminor and premajor types are also supported
+- match:
+    dependency_type: production
+    update_type: "security:minor" # includes patch updates!
+- match:
+    dependency_type: production
+    update_type: "semver:patch"
+```
+
+The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates), but does not support `dependency_name` and `in_range` yet.

@@ -19,10 +19,10 @@ inputs:
     default: true
 
   target:
-    description: The version comparison target (major, minor, patch)
+    description: The version comparison target (major, minor, patch). This is ignored if .github/auto-merge.yml exists
     default: patch
     required: false
 
 runs:
   using: docker
-  image: docker://ahmadnassri/action-dependabot-auto-merge:v1
+  image: docker://ahmadnassri/action-dependabot-auto-merge:v2
