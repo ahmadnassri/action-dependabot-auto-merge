@@ -8,15 +8,17 @@ branding:
 inputs:
   github-token:
     description: The GitHub token used to merge the pull-request
-    default: ${{ github.token }}
+    required: true
 
   command:
     description: The command to pass to Dependabot as a comment
     default: merge
+    required: false
 
   approve:
     description: Auto-approve pull-requests
-    default: true
+    default: 'true'
+    required: false
 
   target:
     description: The version comparison target (major, minor, patch). This is ignored if .github/auto-merge.yml exists

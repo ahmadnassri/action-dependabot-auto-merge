@@ -35,18 +35,19 @@ jobs:
   auto-merge:
     runs-on: ubuntu-latest
     steps:
-      - uses: ahmadnassri/action-dependabot-auto-merge@v1
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2
+        with:
+          github-token: ${{ secrets.mytoken }}
 ```
 
 ### Examples
 
-Use a specific user's Personal Access Token:
+Minimal setup:
 
 ```yaml
 steps:
-  - uses: ahmadnassri/action-dependabot-auto-merge@v1
+  - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
-      target: patch
       github-token: ${{ secrets.mytoken }}
 ```
 
@@ -54,37 +55,53 @@ Only merge if the changed dependency version is a `patch` _(default behavior)_:
 
 ```yaml
 steps:
-  - uses: ahmadnassri/action-dependabot-auto-merge@v1
+  - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
       target: patch
+      github-token: ${{ secrets.mytoken }}
 ```
 
 Only merge if the changed dependency version is a `minor`:
 
 ```yaml
 steps:
-  - uses: ahmadnassri/action-dependabot-auto-merge@v1
+  - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
       target: minor
+      github-token: ${{ secrets.mytoken }}
 ```
 
-Only merge if the changed dependency version is a `major`:
+Using a configuration file:
+
+###### `.github/workflows/auto-merge.yml`
 
 ```yaml
 steps:
-  - uses: ahmadnassri/action-dependabot-auto-merge@v1
+  - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
-      target: major
+      github-token: ${{ secrets.mytoken }}
+```
+
+###### `.github/auto-merge.yml`
+
+```yaml
+- match:
+    dependency_type: all
+    update_type: "semver:minor" # includes patch updates!
 ```
 
 ### Inputs
 
 | input          | required | default        | description                                         |
 | -------------- | -------- | -------------- | --------------------------------------------------- |
+| `github-token` | ✔        | `github.token` | The GitHub token used to merge the pull-request     |
 | `target`       | ❌       | `patch`        | The version comparison target (major, minor, patch) |
-| `github-token` | ❌       | `github.token` | The GitHub token used to merge the pull-request     |
 | `command`      | ❌       | `merge`        | The command to pass to Dependabot                   |
 | `approve`      | ❌       | `true`         | Auto-approve pull-requests                          |
+
+### Token Scope
+
+The GitHub token is a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with the following scopes: `repo` for private repositories, and `public_repo` for public repositories, and should be created from a user with "push" permission to the repository _(see reference for [user owned repos](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository) and for [org owned repos](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization))_
 
 ### Configuration file syntax
 
@@ -94,7 +111,7 @@ Using the configuration file `.github/auto-merge.yml`, you have the option to pr
 * patch production dependency updates
 * minor security-critical production dependency updates
 
-```yml
+```yaml
 - match:
     dependency_type: development
     # Supported dependency types:
