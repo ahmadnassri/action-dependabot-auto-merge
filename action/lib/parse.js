@@ -37,7 +37,7 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
 
   // exit early
   if (!depName) {
-    core.error('failed to parse title: could not detect dependency name')
+    core.warning('failed to parse title: could not detect dependency name')
     return process.exit(0) // soft exit
   }
 
@@ -47,7 +47,7 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
 
   // exit early
   if (!from || !to || !semver.valid(from.version) || !semver.valid(to.version)) {
-    core.error('failed to parse title: invalid semver')
+    core.warning('failed to parse title: invalid semver')
     return process.exit(0) // soft exit
   }
 
@@ -94,7 +94,7 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
           return true
 
         case update_type === 'in_range':
-          core.error('in_range update type not supported yet')
+          core.warning('in_range update type not supported yet')
           return process.exit(0) // soft exit
 
         // security:patch, semver:minor, ...

@@ -117,7 +117,7 @@ for (const { name, throws, title, config, outcome, message } of tests) {
     assert.plan(throws ? 3 : 2)
 
     sinon.stub(core, 'info') // silence output on terminal
-    sinon.stub(core, 'error')
+    sinon.stub(core, 'warning')
     sinon.stub(process, 'exit')
 
     const result = parse({ title, config })
@@ -125,7 +125,7 @@ for (const { name, throws, title, config, outcome, message } of tests) {
     if (throws === true) {
       assert.ok(process.exit.called)
       assert.equal(process.exit.getCall(0)?.firstArg, 0)
-      assert.equal(core.error.getCall(0)?.firstArg, 'in_range update type not supported yet')
+      assert.equal(core.warning.getCall(0)?.firstArg, 'in_range update type not supported yet')
     } else {
       assert.equal(core.info.getCall(6)?.firstArg, message)
       assert.equal(result, outcome)
@@ -133,6 +133,6 @@ for (const { name, throws, title, config, outcome, message } of tests) {
 
     process.exit.restore()
     core.info.restore()
-    core.error.restore()
+    core.warning.restore()
   })
 }
