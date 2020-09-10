@@ -35,8 +35,10 @@ jobs:
   auto-merge:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
+          target: minor
           github-token: ${{ secrets.mytoken }}
 ```
 
@@ -77,6 +79,7 @@ Using a configuration file:
 
 ```yaml
 steps:
+  - uses: actions/checkout@v2
   - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
       github-token: ${{ secrets.mytoken }}
@@ -138,5 +141,17 @@ Using the configuration file `.github/auto-merge.yml`, you have the option to pr
     dependency_type: production
     update_type: "semver:patch"
 ```
+
+###### Defaults
+
+By default, if no configuration file is present in the repo, the action will assume the following:
+
+```yaml
+- match:
+    dependency_type: all
+    update_type: "semver:$TARGET"
+```
+
+> Where `$TARGET` is the `target` value from the action [Inputs](#inputs)
 
 The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates), but does not support `dependency_name` and `in_range` yet.
