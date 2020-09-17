@@ -21,7 +21,7 @@
 [release-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Arelease
 [release-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/release/badge.svg
 
-Automatically merge Dependabot PRs when version comparison is within range
+Automatically merge Dependabot PRs when version comparison is within range.
 
 ## Usage
 
@@ -41,6 +41,8 @@ jobs:
           target: minor
           github-token: ${{ secrets.mytoken }}
 ```
+
+The action will only merge PRs whose checks (CI/CD) pass.
 
 ### Examples
 
