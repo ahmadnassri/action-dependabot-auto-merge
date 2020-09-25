@@ -23,7 +23,7 @@
 
 Automatically merge Dependabot PRs when version comparison is within range.
 
-> _**Note:** Dependabot will wait until all your status checks pass before merging. This is a function of Dependabot itself, and not this Action.
+> **Note:** _Dependabot will wait until all your status checks pass before merging. This is a function of Dependabot itself, and not this Action._
 
 ## Usage
 
@@ -108,7 +108,14 @@ steps:
 
 ### Token Scope
 
-The GitHub token is a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with the following scopes: `repo` for private repositories, and `public_repo` for public repositories, and should be created from a user with "push" permission to the repository _(see reference for [user owned repos](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository) and for [org owned repos](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization))_
+The GitHub token is a [Personal Access Token][github-pat] with the following scopes:
+
+- `repo` for private repositories
+- `public_repo` for public repositories
+
+The token MUST be created from a user with **`push`** permission to the repository.
+
+> ℹ _see reference for [user owned repos][github-user-repos] and for [org owned repos][github-org-repos]_
 
 ### Configuration file syntax
 
@@ -156,8 +163,7 @@ Using the configuration file `.github/auto-merge.yml`, you have the option to pr
 > - **semver:minor**  
 >   SemVer minor update, e.g. > 1.x && 2.1.4 to 2.3.1
 >
->  To allow `prereleases`, the corresponding `prepatch`, `preminor` and `premajor` types are also supported
-
+> To allow `prereleases`, the corresponding `prepatch`, `preminor` and `premajor` types are also supported
 
 ###### Defaults
 
@@ -171,4 +177,9 @@ By default, if no configuration file is present in the repo, the action will ass
 
 > Where `$TARGET` is the `target` value from the action [Inputs](#inputs)
 
-The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates), but **does not support `in_range` yet**.
+The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates).
+However, **`in_range` is not supported yet**.
+
+[github-pat]: https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
+[github-user-repos]: https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository
+[github-org-repos]: https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization
