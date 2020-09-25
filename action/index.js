@@ -3,9 +3,25 @@ import { inspect } from 'util'
 
 // packages
 import core from '@actions/core'
+import github from '@actions/github'
 
 // modules
 import main from './lib/index.js'
+
+  // exit early
+if (github.context.eventName !== 'pull_request') {
+  core.error('action triggered outside of a pull_request')
+  process.exit(1)
+}
+
+// extract the title
+const { payload: { sender } } = github.context // eslint-disable-line camelcase
+
+// exit early if PR is not by dependabot
+if (!sender || !['dependabot[bot]', 'dependabot-preview[bot]'].includes(sender.login)) {
+  core.warning(`expected PR by "dependabot[bot]", found "${sender ? sender.login : 'no-sender'}" instead`)
+  process.exit(0)
+}
 
 // parse inputs
 const inputs = {
