@@ -23,7 +23,7 @@ tap.test('parse -> pre-release -> direct match', async assert => {
   assert.ok(parse(options))
   assert.ok(core.info.called)
   assert.equal(core.info.getCall(3)?.firstArg, 'to: 6.1.4-prerelease')
-  assert.equal(core.info.getCall(6)?.firstArg, 'all:semver:preminor detected, will auto-merge')
+  assert.equal(core.info.getCall(7)?.firstArg, 'all:semver:preminor detected, will auto-merge')
 
   core.info.restore()
 })
@@ -41,7 +41,7 @@ tap.test('parse -> pre-release -> greater match', async assert => {
   assert.ok(parse(options))
   assert.ok(core.info.called)
   assert.equal(core.info.getCall(3)?.firstArg, 'to: 6.1.4-prerelease')
-  assert.equal(core.info.getCall(6)?.firstArg, 'all:semver:major detected, will auto-merge')
+  assert.equal(core.info.getCall(7)?.firstArg, 'all:semver:major detected, will auto-merge')
 
   core.info.restore()
 })
@@ -59,7 +59,7 @@ tap.test('parse -> pre-release -> lesser match (premajor)', async assert => {
   assert.notOk(parse(options))
   assert.ok(core.info.called)
   assert.equal(core.info.getCall(3)?.firstArg, 'to: 7.0.0-pre.0')
-  assert.equal(core.info.getCall(6)?.firstArg, 'manual merging required')
+  assert.equal(core.info.getCall(7)?.firstArg, 'manual merging required')
 
   core.info.restore()
 })
@@ -77,7 +77,7 @@ tap.test('parse -> pre-release -> lesser match (preminor)', async assert => {
   assert.notOk(parse(options))
   assert.ok(core.info.called)
   assert.equal(core.info.getCall(3)?.firstArg, 'to: 6.2.0-pre.1')
-  assert.equal(core.info.getCall(6)?.firstArg, 'manual merging required')
+  assert.equal(core.info.getCall(7)?.firstArg, 'manual merging required')
 
   core.info.restore()
 })
@@ -95,7 +95,7 @@ tap.test('parse -> pre-release -> actual prerelease', async assert => {
   assert.notOk(parse(options))
   assert.ok(core.info.called)
   assert.equal(core.info.getCall(3)?.firstArg, 'to: 6.1.2-pre.1')
-  assert.equal(core.info.getCall(6)?.firstArg, 'manual merging required')
+  assert.equal(core.info.getCall(7)?.firstArg, 'manual merging required')
 
   core.info.restore()
 })

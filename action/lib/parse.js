@@ -82,20 +82,30 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
   const versionChange = semver.diff(from.version, to.version)
 
   // check all configuration variants to see if one matches
-  for (const { match: { dependency_type, update_type } } of config) {
+  for (const { match: { dependency_name, dependency_type, update_type } } of config) {
     if (
+      // catch all
       dependency_type === 'all' ||
-      (dependency_type === 'production' && isProd) ||
-      (dependency_type === 'development' && !isProd)
-    ) {
-      switch (true) {
-        case update_type === 'all':
-          core.info(`${dependency_type}:${update_type} detected, will auto-merge`)
-          return true
 
+      // evaluate prod dependencies
+      (dependency_type === 'production' && isProd) ||
+
+      // evaluate dev dependencies
+      (dependency_type === 'development' && !isProd) ||
+
+      // evaluate individual dependency
+      (dependency_name && depName.match(new RegExp(dependency_name)))
+    ) {
+      core.info(`config: ${dependency_name || dependency_type}:${update_type}`)
+
+      switch (true) {
         case update_type === 'in_range':
           core.warning('in_range update type not supported yet')
           return process.exit(0) // soft exit
+
+        case update_type === 'all':
+          core.info(`${dependency_name || dependency_type}:${update_type} detected, will auto-merge`)
+          return true
 
         // security:patch, semver:minor, ...
         case regex.config.test(update_type): {
@@ -107,7 +117,7 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
           // evaluate weight of detected change
           if ((weight[target] || 0) >= (weight[versionChange] || 0)) {
           // tell dependabot to merge
-            core.info(`${dependency_type}:${update_type} detected, will auto-merge`)
+            core.info(`${dependency_name || dependency_type}:${update_type} detected, will auto-merge`)
             return true
           }
         }

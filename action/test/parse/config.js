@@ -127,7 +127,7 @@ for (const { name, throws, title, config, outcome, message } of tests) {
       assert.equal(process.exit.getCall(0)?.firstArg, 0)
       assert.equal(core.warning.getCall(0)?.firstArg, 'in_range update type not supported yet')
     } else {
-      assert.equal(core.info.getCall(6)?.firstArg, message)
+      assert.equal(core.info.getCall(-1)?.firstArg, message)
       assert.equal(result, outcome)
     }
 

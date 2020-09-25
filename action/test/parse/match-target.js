@@ -13,7 +13,7 @@ function config (target) {
 }
 
 tap.test('title -> in range', async assert => {
-  assert.plan(7)
+  assert.plan(8)
 
   sinon.stub(core, 'info')
   sinon.stub(fs, 'existsSync').returns(false)
@@ -29,7 +29,8 @@ tap.test('title -> in range', async assert => {
   assert.equal(core.info.getCall(1)?.firstArg, 'depName: api-problem')
   assert.equal(core.info.getCall(2)?.firstArg, 'from: 6.1.2')
   assert.equal(core.info.getCall(3)?.firstArg, 'to: 6.1.4')
-  assert.equal(core.info.getCall(6)?.firstArg, 'all:semver:major detected, will auto-merge')
+  assert.equal(core.info.getCall(6)?.firstArg, 'config: all:semver:major')
+  assert.equal(core.info.getCall(7)?.firstArg, 'all:semver:major detected, will auto-merge')
 
   core.info.restore()
   fs.existsSync.restore()
@@ -50,7 +51,7 @@ tap.test('parse -> out of range', async assert => {
   assert.ok(core.info.called)
   assert.equal(core.info.getCall(2)?.firstArg, 'from: 6.1.2')
   assert.equal(core.info.getCall(3)?.firstArg, 'to: 7.0.0')
-  assert.equal(core.info.getCall(6)?.firstArg, 'manual merging required')
+  assert.equal(core.info.getCall(7)?.firstArg, 'manual merging required')
 
   core.info.restore()
   fs.existsSync.restore()

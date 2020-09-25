@@ -23,6 +23,6 @@ export default function ({ workspace, target }) {
     config = [{ match: { dependency_type: 'all', update_type: `semver:${target}` } }]
     core.info('using workflow\'s "target": \n' + yaml.safeDump(config))
   }
-  
+
   return config
 }
