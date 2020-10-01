@@ -16,7 +16,7 @@
     "test:100": "tap test --no-esm --100 --color --coverage-report=lcov --no-browser"
   },
   "dependencies": {
-    "@actions/core": "^1.2.4",
+    "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "js-yaml": "^3.14.0",
     "semver": "^7.3.2"
