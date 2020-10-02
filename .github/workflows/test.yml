@@ -24,4 +24,4 @@ jobs:
           key: client-${{ hashFiles('**/package-lock.json') }}
 
       - run: npm ci
-      - run: npm run test:100
+      - run: npm run test:ci
