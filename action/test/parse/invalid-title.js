@@ -18,7 +18,7 @@ tap.test('parse -> invalid semver', assert => {
 
   assert.ok(process.exit.called)
   assert.equal(process.exit.getCall(0)?.firstArg, 0)
-  assert.equal(core.warning.getCall(0)?.firstArg, 'failed to parse title: invalid semver')
+  assert.equal(core.warning.getCall(0)?.firstArg, 'failed to parse title: no recognizable versions')
 
   process.exit.restore()
   core.info.restore()

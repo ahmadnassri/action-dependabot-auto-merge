@@ -42,11 +42,16 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
   }
 
   // extract version from the title
-  const from = title.match(new RegExp('from ' + regex.semver.source))?.groups
-  const to = title.match(new RegExp('to ' + regex.semver.source))?.groups
+  const from = title.match(new RegExp('from v?' + regex.semver.source))?.groups
+  const to = title.match(new RegExp('to v?' + regex.semver.source))?.groups
+
+  if (!from || !to) {
+    core.warning('failed to parse title: no recognizable versions')
+    return process.exit(0) // soft exit
+  }
 
   // exit early
-  if (!from || !to || !semver.valid(from.version) || !semver.valid(to.version)) {
+  if (!semver.valid(from.version) || !semver.valid(to.version)) {
     core.warning('failed to parse title: invalid semver')
     return process.exit(0) // soft exit
   }
