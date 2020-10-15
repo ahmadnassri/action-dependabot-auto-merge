@@ -85,7 +85,8 @@ tap.test('parse -> out of range', async assert => {
 tap.test('parse -> edge cases', async assert => {
   const titles = [
     { message: 'Update rake requirement from 10.4.0 to 13.0.0', name: 'rake' },
-    { message: 'Bump actions/cache from v2.0.0 to v2.1.2', name: 'actions/cache' }
+    { message: 'Bump actions/cache from v2.0.0 to v2.1.2', name: 'actions/cache' },
+    { message: 'Update actions/setup-python requirement to v2.1.4', name: 'actions/setup-python' }
   ]
 
   assert.plan(titles.length * 3)

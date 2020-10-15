@@ -45,13 +45,13 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
   const from = title.match(new RegExp('from v?' + regex.semver.source))?.groups
   const to = title.match(new RegExp('to v?' + regex.semver.source))?.groups
 
-  if (!from || !to) {
+  if (!to) {
     core.warning('failed to parse title: no recognizable versions')
     return process.exit(0) // soft exit
   }
 
   // exit early
-  if (!semver.valid(from.version) || !semver.valid(to.version)) {
+  if (!semver.valid(to.version)) {
     core.warning('failed to parse title: invalid semver')
     return process.exit(0) // soft exit
   }
@@ -78,13 +78,17 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
   }
 
   // log
-  core.info(`from: ${from.version}`)
+  core.info(`from: ${from ? from.version : 'unknown'}`)
   core.info(`to: ${to.version}`)
   core.info(`dependency type: ${isProd ? 'production' : 'development'}`)
   core.info(`security critical: ${isSecurity}`)
 
   // analyze with semver
-  const versionChange = semver.diff(from.version, to.version)
+  let versionChange
+
+  if (from && from.version) {
+    versionChange = semver.diff(from.version, to.version)
+  }
 
   // check all configuration variants to see if one matches
   for (const { match: { dependency_name, dependency_type, update_type } } of config) {
@@ -118,6 +122,17 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
 
           // skip when config is for security update and PR is not security
           if (type === 'security' && !isSecurity) continue
+
+          if (target === 'all') {
+            core.info(`${dependency_name || dependency_type}:${update_type} detected, will auto-merge`)
+            return true
+          }
+
+          // when there is no "from" version, there is no change detected
+          if (!versionChange) {
+            core.warning('no version range detected in PR title')
+            continue
+          }
 
           // evaluate weight of detected change
           if ((weight[target] || 0) >= (weight[versionChange] || 0)) {
