@@ -180,6 +180,32 @@ By default, if no configuration file is present in the repo, the action will ass
 The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates).
 However, **`in_range` is not supported yet**.
 
+## Exceptions and Edge Cases
+
+1. Parsing of _version ranges_ is not currently supported
+
+```
+Update stone requirement from ==1.* to ==3.*
+requirements: update sphinx-autodoc-typehints requirement from <=1.11.0 to <1.12.0
+Update rake requirement from ~> 10.4 to ~> 13.0
+```
+
+2. Parsing of non semver numbering is not currently supported
+
+```
+Bump actions/cache from v2.0 to v2.1.2
+chore(deps): bump docker/build-push-action from v1 to v2
+```
+
+3. Sometimes Dependabot does not include the "from" version, so version comparison logic is impossible:
+
+```
+Update actions/setup-python requirement to v2.1.4
+Update actions/cache requirement to v2.1.2
+```
+
+if your config is anything other than `update_type: all`, or `update_type: semver:all` the action will fallback to manual merge, since there is no way to compare version ranges for merging.
+
 [github-pat]: https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 [github-user-repos]: https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository
 [github-org-repos]: https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization
