@@ -81,3 +81,26 @@ tap.test('parse -> out of range', async assert => {
   core.info.restore()
   fs.existsSync.restore()
 })
+
+tap.test('parse -> edge cases', async assert => {
+  const titles = [
+    { message: 'Update rake requirement from 10.4.0 to 13.0.0', name: 'rake' },
+    { message: 'Bump actions/cache from v2.0.0 to v2.1.2', name: 'actions/cache' }
+  ]
+
+  assert.plan(titles.length * 3)
+
+  sinon.stub(core, 'info')
+  sinon.stub(fs, 'existsSync').returns(false)
+
+  for (const title of titles) {
+    assert.ok(parse({ title: title.message, config: [{ match: { dependency_name: title.name, update_type: 'all' } }] }))
+    assert.ok(core.info.called)
+    assert.equal(core.info.getCall(1)?.firstArg, `depName: ${title.name}`)
+
+    core.info.resetHistory()
+  }
+
+  core.info.restore()
+  fs.existsSync.restore()
+})
