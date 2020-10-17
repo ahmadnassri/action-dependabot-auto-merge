@@ -1,10 +1,9 @@
 name: test
 
 on:
-  push:
-    branches-ignore:
-      - master
   pull_request:
+  push:
+    branches-ignore: [ master ]
 
 jobs:
   test:
