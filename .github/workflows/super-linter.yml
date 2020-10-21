@@ -12,7 +12,7 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
 
     steps:
-      - run: echo "::warning::skipped duplicate run"
+      - run: echo "::warning ::skipped duplicate run"
 
   lint:
     timeout-minutes: 5
