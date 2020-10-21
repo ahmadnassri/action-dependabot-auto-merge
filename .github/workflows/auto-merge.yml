@@ -4,10 +4,12 @@ on: pull_request
 
 jobs:
   auto-merge:
+    timeout-minutes: 5
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-      - name: dogfood
-        uses: ./
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           github-token: ${{ secrets.GH_TOKEN }}
