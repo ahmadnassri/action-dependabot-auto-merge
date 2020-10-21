@@ -21,7 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: release
-        name: semantic-release
         uses: ahmadnassri/action-semantic-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -62,7 +61,7 @@ jobs:
         docker:
           - name: docker hub
             registry: registry.hub.docker.com
-            password: DOCKER_PASSWORD
+            password: DOCKER_TOKEN
             repository: ${{ github.event.repository.full_name }}
 
           - name: github package registry
@@ -71,8 +70,7 @@ jobs:
             repository: ${{ github.event.repository.full_name }}/${{ github.event.repository.name }}
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       - name: ${{ matrix.docker.name }}
         uses: docker/build-push-action@v1
