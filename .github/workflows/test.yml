@@ -12,7 +12,7 @@ jobs:
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
 
     steps:
-      - run: echo "this is fine 🔥"
+      - run: echo "::warning::skipped duplicate run"
 
   dependencies:
     timeout-minutes: 5
@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2.1.2
       - run: npm audit --audit-level=critical
 
   test:
@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2.1.2
         with:
           node-version: 14
 
