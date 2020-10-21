@@ -101,7 +101,7 @@ MD032: true
 
 # inline HTML
 MD033:
-  allowed_elements: []
+  allowed_elements: [details, summary]
 
 # Bare URL used
 MD034: true
