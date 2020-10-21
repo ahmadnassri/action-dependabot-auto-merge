@@ -1,0 +1,30 @@
+# $about.title$
+
+$about.description$
+
+[![license][license-img]][license-url]
+[![release][release-img]][release-url]
+[![super linter][super-linter-img]][super-linter-url]
+[![test][test-img]][test-url]
+[![release][release-img]][release-url]
+
+$body$
+
+----
+> Author: [Ahmad Nassri](https://www.ahmadnassri.com/) &bull;
+> Twitter: [@AhmadNassri](https://twitter.com/AhmadNassri)
+
+[license-url]: LICENSE
+[license-img]: https://badgen.net/github/license/$about.repository$
+
+[release-url]: https://github.com/$about.repository$/releases
+[release-img]: https://badgen.net/github/release/$about.repository$
+
+[super-linter-url]: https://github.com/$about.repository$/actions?query=workflow%3Asuper-linter
+[super-linter-img]: https://github.com/$about.repository$/workflows/super-linter/badge.svg
+
+[test-url]: https://github.com/$about.repository$/actions?query=workflow%3Atest
+[test-img]: https://github.com/$about.repository$/workflows/test/badge.svg
+
+[release-url]: https://github.com/$about.repository$/actions?query=workflow%3Arelease
+[release-img]: https://github.com/$about.repository$/workflows/release/badge.svg
