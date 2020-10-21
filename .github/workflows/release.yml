@@ -1,32 +1,14 @@
 name: release
 
 on:
-  push:
+  workflow_run:
+    workflows: [ test ]
     branches: [ master ]
+    types: [ completed ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: action
-
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2.1.2
-        with:
-          node-version: 14
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: client-${{ hashFiles('**/package-lock.json') }}
-
-      - run: npm ci
-      - run: npm run test:ci
-
   release:
-    needs: test
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     runs-on: ubuntu-latest
 
@@ -46,7 +28,9 @@ jobs:
 
   alias:
     needs: release
+
     if: needs.release.outputs.published == 'true'
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -69,7 +53,9 @@ jobs:
 
   publish:
     needs: release
+
     if: needs.release.outputs.published == 'true'
+
     runs-on: ubuntu-latest
     strategy:
       matrix:

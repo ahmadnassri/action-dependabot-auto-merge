@@ -1,12 +1,24 @@
 name: test
 
-on:
-  pull_request:
-  push:
-    branches-ignore: [ master ]
+on: [ push, pull_request ]
 
 jobs:
+  deduplicate:
+    timeout-minutes: 5
+
+    runs-on: ubuntu-latest
+
+    # run on external PRs, but on internal PRs as they'll be run by the push to the branch.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+
+    steps:
+      - run: echo "this is fine 🔥"
+
   test:
+    timeout-minutes: 5
+
+    needs: deduplicate
+
     runs-on: ubuntu-latest
 
     defaults:
@@ -18,10 +30,11 @@ jobs:
       - uses: actions/setup-node@v2.1.2
         with:
           node-version: 14
+
       - uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: client-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ hashFiles('**/package-lock.json') }}
 
       - run: npm ci
       - run: npm run test:ci
