@@ -1,0 +1,36 @@
+name: readme
+
+on:
+  push:
+    paths:
+      - docs/**
+      - colophon.yml
+      - .github/workflows/readme.yml
+
+jobs:
+  readme:
+    timeout-minutes: 5
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker://pandoc/core:2.9
+        with:
+          args: >-
+            --metadata-file=colophon.yml
+            --template=docs/README.template
+            --output=README.md
+            --from=markdown_github+yaml_metadata_block
+            --to=gfm
+            --fail-if-warnings
+            docs/README.md
+
+      - name: commit changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add README.md
+          git commit -m "docs(readme): update readme" || exit 0
+          git push
+
