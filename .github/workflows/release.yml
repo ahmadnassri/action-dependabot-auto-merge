@@ -89,10 +89,10 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           tags: |
             ${{ github.event.repository.full_name }}:latest
-            ${{ github.event.repository.full_name }}:v${{ needs.release.outputs.release-version-major }}
+            ${{ github.event.repository.full_name }}:${{ needs.release.outputs.release-version-major }}
             ${{ github.event.repository.full_name }}:${{ needs.release.outputs.release-version }}
             ghcr.io/${{ github.event.repository.full_name }}:latest
-            ghcr.io/${{ github.event.repository.full_name }}:v${{ needs.release.outputs.release-version-major }}
+            ghcr.io/${{ github.event.repository.full_name }}:${{ needs.release.outputs.release-version-major }}
             ghcr.io/${{ github.event.repository.full_name }}:${{ needs.release.outputs.release-version }}
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}
