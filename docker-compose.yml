@@ -15,7 +15,15 @@ services:
     image: pandoc/core
     volumes:
       - ./:/data
-    command: docs/README.md --metadata-file colophon.yml --template docs/README.template --output README.md --from markdown_github+yaml_metadata_block --to gfm --fail-if-warnings
+    command: >-
+      --metadata-file=colophon.yml
+      --template=docs/README.template
+      --output=README.md
+      --from=markdown_github+yaml_metadata_block
+      --to=gfm
+      --fail-if-warnings
+      --wrap=preserve
+      docs/README.md
 
   test:
     build: .
