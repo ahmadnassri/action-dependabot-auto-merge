@@ -1,17 +1,14 @@
 # GitHub Action: Dependabot Auto Merge
 
-Automatically merge Dependabot PRs when version comparison is within
-range.
+Automatically merge Dependabot PRs when version comparison is within range.
 
 [![license][license-img]][license-url]
 [![release][release-img]][release-url]
 [![super linter][super-linter-img]][super-linter-url]
 [![test][test-img]][test-url]
-[![release][release-img]][release-url]
+[![semantic][semantic-img]][semantic-url]
 
-> **Note:** *Dependabot will wait until all your status checks pass
-> before merging. This is a function of Dependabot itself, and not this
-> Action.*
+> **Note:** *Dependabot will wait until all your status checks pass before merging. This is a function of Dependabot itself, and not this Action.*
 
 ## Usage
 
@@ -45,8 +42,7 @@ steps:
       github-token: ${{ secrets.mytoken }}
 ```
 
-Only merge if the changed dependency version is a `patch` *(default
-behavior)*:
+Only merge if the changed dependency version is a `patch` *(default behavior)*:
 
 ``` yaml
 steps:
@@ -97,26 +93,18 @@ steps:
 
 ### Token Scope
 
-The GitHub token is a [Personal Access
-Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
-with the following scopes:
+The GitHub token is a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with the following scopes:
 
   - `repo` for private repositories
   - `public_repo` for public repositories
 
-The token MUST be created from a user with **`push`** permission to the
-repository.
+The token MUST be created from a user with **`push`** permission to the repository.
 
-> ℹ *see reference for [user owned
-> repos](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository)
-> and for [org owned
-> repos](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization)*
+> ℹ *see reference for [user owned repos](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository) and for [org owned repos](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization)*
 
 ### Configuration file syntax
 
-Using the configuration file `.github/auto-merge.yml`, you have the
-option to provide a more fine-grained configuration. The following
-example configuration file merges
+Using the configuration file `.github/auto-merge.yml`, you have the option to provide a more fine-grained configuration. The following example configuration file merges
 
   - minor updates for `aws-sdk`
   - minor development dependency updates
@@ -151,8 +139,7 @@ example configuration file merges
 | `dependency_type` | ❌        | `all`, `production`, `development`         |
 | `update_type`     | ✔        | `all`, `security:*`, `semver:*`            |
 
-> **`update_type`** can specify security match or semver match with the
-> syntax: `${type}:${match}`, e.g.
+> **`update_type`** can specify security match or semver match with the syntax: `${type}:${match}`, e.g.
 > 
 >   - **security:patch**  
 >     SemVer patch update that fixes a known security vulnerability
@@ -163,13 +150,11 @@ example configuration file merges
 >   - **semver:minor**  
 >     SemVer minor update, e.g. \> 1.x && 2.1.4 to 2.3.1
 > 
-> To allow `prereleases`, the corresponding `prepatch`, `preminor` and
-> `premajor` types are also supported
+> To allow `prereleases`, the corresponding `prepatch`, `preminor` and `premajor` types are also supported
 
 ###### Defaults
 
-By default, if no configuration file is present in the repo, the action
-will assume the following:
+By default, if no configuration file is present in the repo, the action will assume the following:
 
 ``` yaml
 - match:
@@ -177,11 +162,9 @@ will assume the following:
     update_type: semver:${TARGET}
 ```
 
-> Where `$TARGET` is the `target` value from the action
-> [Inputs](#inputs)
+> Where `$TARGET` is the `target` value from the action [Inputs](#inputs)
 
-The syntax is based on the [legacy dependaBot v1 config
-format](https://dependabot.com/docs/config-file/#automerged_updates).
+The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates).
 However, **`in_range` is not supported yet**.
 
 ## Exceptions and Edge Cases
@@ -201,17 +184,14 @@ However, **`in_range` is not supported yet**.
     Bump actions/cache from v2.0 to v2.1.2
     chore(deps): bump docker/build-push-action from v1 to v2
 
-1.  Sometimes Dependabot does not include the "from" version, so version
-    comparison logic is impossible:
+1.  Sometimes Dependabot does not include the "from" version, so version comparison logic is impossible:
 
 <!-- end list -->
 
     Update actions/setup-python requirement to v2.1.4
     Update actions/cache requirement to v2.1.2
 
-if your config is anything other than `update_type: all`, or
-`update_type: semver:all` the action will fallback to manual merge,
-since there is no way to compare version ranges for merging.
+if your config is anything other than `update_type: all`, or `update_type: semver:all` the action will fallback to manual merge, since there is no way to compare version ranges for merging.
 
 ----
 > Author: [Ahmad Nassri](https://www.ahmadnassri.com/) &bull;
@@ -229,5 +209,5 @@ since there is no way to compare version ranges for merging.
 [test-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Atest
 [test-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/test/badge.svg
 
-[release-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Arelease
-[release-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/release/badge.svg
+[semantic-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Arelease
+[semantic-img]: https://badgen.net/badge/📦/semantically%20released/blue
