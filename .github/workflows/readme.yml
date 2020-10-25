@@ -24,6 +24,7 @@ jobs:
             --from=markdown_github+yaml_metadata_block
             --to=gfm
             --fail-if-warnings
+            --wrap=preserve
             docs/README.md
 
       - name: commit changes
