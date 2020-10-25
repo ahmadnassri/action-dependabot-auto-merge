@@ -1,33 +1,21 @@
 # GitHub Action: Dependabot Auto Merge
 
+Automatically merge Dependabot PRs when version comparison is within
+range.
+
 [![license][license-img]][license-url]
-[![version][version-img]][version-url]
+[![release][release-img]][release-url]
 [![super linter][super-linter-img]][super-linter-url]
 [![test][test-img]][test-url]
 [![release][release-img]][release-url]
 
-[license-url]: LICENSE
-[license-img]: https://badgen.net/github/license/ahmadnassri/action-dependabot-auto-merge
-
-[version-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/releases
-[version-img]: https://badgen.net//github/release/ahmadnassri/action-dependabot-auto-merge
-
-[super-linter-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Asuper-linter
-[super-linter-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/super-linter/badge.svg
-
-[test-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Atest
-[test-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/test/badge.svg
-
-[release-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Arelease
-[release-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/release/badge.svg
-
-Automatically merge Dependabot PRs when version comparison is within range.
-
-> **Note:** _Dependabot will wait until all your status checks pass before merging. This is a function of Dependabot itself, and not this Action._
+> **Note:** *Dependabot will wait until all your status checks pass
+> before merging. This is a function of Dependabot itself, and not this
+> Action.*
 
 ## Usage
 
-```yaml
+``` yaml
 name: auto-merge
 
 on:
@@ -50,16 +38,17 @@ The action will only merge PRs whose checks (CI/CD) pass.
 
 Minimal setup:
 
-```yaml
+``` yaml
 steps:
   - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
       github-token: ${{ secrets.mytoken }}
 ```
 
-Only merge if the changed dependency version is a `patch` _(default behavior)_:
+Only merge if the changed dependency version is a `patch` *(default
+behavior)*:
 
-```yaml
+``` yaml
 steps:
   - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
@@ -69,7 +58,7 @@ steps:
 
 Only merge if the changed dependency version is a `minor`:
 
-```yaml
+``` yaml
 steps:
   - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
@@ -81,7 +70,7 @@ Using a configuration file:
 
 ###### `.github/workflows/auto-merge.yml`
 
-```yaml
+``` yaml
 steps:
   - uses: actions/checkout@v2
   - uses: ahmadnassri/action-dependabot-auto-merge@v2
@@ -91,7 +80,7 @@ steps:
 
 ###### `.github/auto-merge.yml`
 
-```yaml
+``` yaml
 - match:
     dependency_type: all
     update_type: "semver:minor" # includes patch updates!
@@ -108,25 +97,35 @@ steps:
 
 ### Token Scope
 
-The GitHub token is a [Personal Access Token][github-pat] with the following scopes:
+The GitHub token is a [Personal Access
+Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+with the following scopes:
 
-- `repo` for private repositories
-- `public_repo` for public repositories
+  - `repo` for private repositories
+  - `public_repo` for public repositories
 
-The token MUST be created from a user with **`push`** permission to the repository.
+The token MUST be created from a user with **`push`** permission to the
+repository.
 
-> ℹ _see reference for [user owned repos][github-user-repos] and for [org owned repos][github-org-repos]_
+> ℹ *see reference for [user owned
+> repos](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository)
+> and for [org owned
+> repos](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization)*
 
 ### Configuration file syntax
 
-Using the configuration file `.github/auto-merge.yml`, you have the option to provide a more fine-grained configuration. The following example configuration file merges
+Using the configuration file `.github/auto-merge.yml`, you have the
+option to provide a more fine-grained configuration. The following
+example configuration file merges
 
-- minor updates for `aws-sdk`
-- minor development dependency updates
-- patch production dependency updates
-- minor security-critical production dependency updates
+  - minor updates for `aws-sdk`
+  - minor development dependency updates
+  - patch production dependency updates
+  - minor security-critical production dependency updates
 
-```yaml
+<!-- end list -->
+
+``` yaml
 - match:
     dependency_name: aws-sdk
     update_type: semver:minor
@@ -148,64 +147,87 @@ Using the configuration file `.github/auto-merge.yml`, you have the option to pr
 
 | property          | required | supported values                           |
 | ----------------- | -------- | ------------------------------------------ |
-| `dependency_name` | ❌       | full name of dependency, or a regex string |
-| `dependency_type` | ❌       | `all`, `production`, `development`         |
+| `dependency_name` | ❌        | full name of dependency, or a regex string |
+| `dependency_type` | ❌        | `all`, `production`, `development`         |
 | `update_type`     | ✔        | `all`, `security:*`, `semver:*`            |
 
-> **`update_type`** can specify security match or semver match with the syntax: `${type}:${match}`, e.g.
->
-> - **security:patch**  
->   SemVer patch update that fixes a known security vulnerability
->
-> - **semver:patch**  
->   SemVer patch update, e.g. > 1.x && 1.0.1 to 1.0.3
->
-> - **semver:minor**  
->   SemVer minor update, e.g. > 1.x && 2.1.4 to 2.3.1
->
-> To allow `prereleases`, the corresponding `prepatch`, `preminor` and `premajor` types are also supported
+> **`update_type`** can specify security match or semver match with the
+> syntax: `${type}:${match}`, e.g.
+> 
+>   - **security:patch**  
+>     SemVer patch update that fixes a known security vulnerability
+> 
+>   - **semver:patch**  
+>     SemVer patch update, e.g. \> 1.x && 1.0.1 to 1.0.3
+> 
+>   - **semver:minor**  
+>     SemVer minor update, e.g. \> 1.x && 2.1.4 to 2.3.1
+> 
+> To allow `prereleases`, the corresponding `prepatch`, `preminor` and
+> `premajor` types are also supported
 
 ###### Defaults
 
-By default, if no configuration file is present in the repo, the action will assume the following:
+By default, if no configuration file is present in the repo, the action
+will assume the following:
 
-```yaml
+``` yaml
 - match:
     dependency_type: all
     update_type: semver:${TARGET}
 ```
 
-> Where `$TARGET` is the `target` value from the action [Inputs](#inputs)
+> Where `$TARGET` is the `target` value from the action
+> [Inputs](#inputs)
 
-The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates).
+The syntax is based on the [legacy dependaBot v1 config
+format](https://dependabot.com/docs/config-file/#automerged_updates).
 However, **`in_range` is not supported yet**.
 
 ## Exceptions and Edge Cases
 
-1. Parsing of _version ranges_ is not currently supported
+1.  Parsing of *version ranges* is not currently supported
 
-```
-Update stone requirement from ==1.* to ==3.*
-requirements: update sphinx-autodoc-typehints requirement from <=1.11.0 to <1.12.0
-Update rake requirement from ~> 10.4 to ~> 13.0
-```
+<!-- end list -->
 
-2. Parsing of non semver numbering is not currently supported
+    Update stone requirement from ==1.* to ==3.*
+    requirements: update sphinx-autodoc-typehints requirement from <=1.11.0 to <1.12.0
+    Update rake requirement from ~> 10.4 to ~> 13.0
 
-```
-Bump actions/cache from v2.0 to v2.1.2
-chore(deps): bump docker/build-push-action from v1 to v2
-```
+1.  Parsing of non semver numbering is not currently supported
 
-3. Sometimes Dependabot does not include the "from" version, so version comparison logic is impossible:
+<!-- end list -->
 
-```
-Update actions/setup-python requirement to v2.1.4
-Update actions/cache requirement to v2.1.2
-```
+    Bump actions/cache from v2.0 to v2.1.2
+    chore(deps): bump docker/build-push-action from v1 to v2
 
-if your config is anything other than `update_type: all`, or `update_type: semver:all` the action will fallback to manual merge, since there is no way to compare version ranges for merging.
+1.  Sometimes Dependabot does not include the "from" version, so version
+    comparison logic is impossible:
 
-[github-pat]: https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
-[github-user-repos]: https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository
-[github-org-repos]: https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization
+<!-- end list -->
+
+    Update actions/setup-python requirement to v2.1.4
+    Update actions/cache requirement to v2.1.2
+
+if your config is anything other than `update_type: all`, or
+`update_type: semver:all` the action will fallback to manual merge,
+since there is no way to compare version ranges for merging.
+
+----
+> Author: [Ahmad Nassri](https://www.ahmadnassri.com/) &bull;
+> Twitter: [@AhmadNassri](https://twitter.com/AhmadNassri)
+
+[license-url]: LICENSE
+[license-img]: https://badgen.net/github/license/ahmadnassri/action-dependabot-auto-merge
+
+[release-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/releases
+[release-img]: https://badgen.net/github/release/ahmadnassri/action-dependabot-auto-merge
+
+[super-linter-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Asuper-linter
+[super-linter-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/super-linter/badge.svg
+
+[test-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Atest
+[test-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/test/badge.svg
+
+[release-url]: https://github.com/ahmadnassri/action-dependabot-auto-merge/actions?query=workflow%3Arelease
+[release-img]: https://github.com/ahmadnassri/action-dependabot-auto-merge/workflows/release/badge.svg
