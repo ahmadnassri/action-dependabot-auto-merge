@@ -31,9 +31,9 @@ jobs:
         with:
           github-token: ${{secrets.GH_TOKEN}}
           script: |
-            const { readFile } = require('fs/promises')
+            const { readFileSync } = require('fs')
 
-            const content = await readFile(`${process.env.GITHUB_WORKSPACE}/README.md`)
+            const content = readFileSync(`${process.env.GITHUB_WORKSPACE}/README.md`)
 
             await github.repos.createOrUpdateFileContents({
               ...context.repo,
