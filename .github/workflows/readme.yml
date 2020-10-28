@@ -27,10 +27,17 @@ jobs:
             --wrap=preserve
             docs/README.md
 
-      - name: commit changes
-        run: |
-          git config --local user.email "$(git log --format='%ae' HEAD^!)"
-          git config --local user.name "$(git log --format='%an' HEAD^!)"
-          git add README.md
-          git commit -m "docs(readme): update readme" || exit 0
-          git push https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
+      - uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GH_TOKEN}}
+          script: |
+            const { readFile } = require('fs/promises')
+
+            const content = await readFile(`${process.env.GITHUB_WORKSPACE}/README.md`)
+
+            await github.repos.createOrUpdateFileContents({
+              ...context.repo,
+              path: 'README.md',
+              message: 'docs(readme): update readme',
+              content: content.toString('base64')
+            })
