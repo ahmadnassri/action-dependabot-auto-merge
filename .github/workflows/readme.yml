@@ -33,11 +33,14 @@ jobs:
           script: |
             const { readFileSync } = require('fs')
 
-            const content = readFileSync(`${process.env.GITHUB_WORKSPACE}/README.md`)
+            const path = 'README.md'
 
-            await github.repos.createOrUpdateFileContents({
-              ...context.repo,
-              path: 'README.md',
+            const content = readFileSync(`${process.env.GITHUB_WORKSPACE}/${path}`)
+
+            const { data } = await github.repos.getContent({ ...context.repo, path })
+
+            await github.repos.createOrUpdateFileContents({...context.repo, path,
+              sha: data.sha,
               message: 'docs(readme): update readme',
               content: content.toString('base64')
             })
