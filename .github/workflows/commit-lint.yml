@@ -7,6 +7,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: ahmadnassri/action-conventional-commit-lint@v1
-        with:
-          token: ${{ github.token }}
+      - uses: ahmadnassri/action-commit-lint@v1
