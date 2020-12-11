@@ -26,5 +26,5 @@ inputs:
     required: false
 
 runs:
-  using: node14
-  main: action/index.js
+  using: docker
+  image: Dockerfile
