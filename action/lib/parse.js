@@ -96,9 +96,11 @@ export default function ({
   // analyze with semver
   let versionChange;
 
+  console.log(from.version, to.version);
   if (from && from.version) {
     versionChange = semverDiff(from.version, to.version);
   }
+  console.log(versionChange);
 
   // check all configuration variants to see if one matches
   for (const {
@@ -150,6 +152,8 @@ export default function ({
             core.warning("no version range detected in PR title");
             continue;
           }
+
+          console.log(versionChange);
 
           // evaluate weight of detected change
           if ((weight[target] || 0) >= (weight[versionChange] || 0)) {

@@ -17,7 +17,7 @@ inputs:
 
   approve:
     description: Auto-approve pull-requests
-    default: 'true'
+    default: "true"
     required: false
 
   target:
@@ -27,4 +27,4 @@ inputs:
 
 runs:
   using: docker
-  image: docker://ghcr.io/ahmadnassri/action-dependabot-auto-merge:v2
+  image: Dockerfile
