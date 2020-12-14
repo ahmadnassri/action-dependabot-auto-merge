@@ -84,12 +84,13 @@ steps:
 
 ### Inputs
 
-| input          | required | default        | description                                         |
-| -------------- | -------- | -------------- | --------------------------------------------------- |
-| `github-token` | ✔        | `github.token` | The GitHub token used to merge the pull-request     |
-| `target`       | ❌        | `patch`        | The version comparison target (major, minor, patch) |
-| `command`      | ❌        | `merge`        | The command to pass to Dependabot                   |
-| `approve`      | ❌        | `true`         | Auto-approve pull-requests                          |
+| input          | required | default                  | description                                         |
+| -------------- | -------- | ------------------------ | --------------------------------------------------- |
+| `github-token` | ✔        | `github.token`           | The GitHub token used to merge the pull-request     |
+| `config`       | ✔        | `.github/auto-merge.yml` | Path to configuration file *(relative to root)*     |
+| `target`       | ❌        | `patch`                  | The version comparison target (major, minor, patch) |
+| `command`      | ❌        | `merge`                  | The command to pass to Dependabot                   |
+| `approve`      | ❌        | `true`                   | Auto-approve pull-requests                          |
 
 ### Token Scope
 
@@ -104,7 +105,7 @@ The token MUST be created from a user with **`push`** permission to the reposito
 
 ### Configuration file syntax
 
-Using the configuration file `.github/auto-merge.yml`, you have the option to provide a more fine-grained configuration. The following example configuration file merges
+Using the configuration file *(specified with `config` input)*, you have the option to provide a more fine-grained configuration. The following example configuration file merges
 
   - minor updates for `aws-sdk`
   - minor development dependency updates
