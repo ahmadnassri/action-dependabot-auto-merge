@@ -20,7 +20,7 @@ export default async function (inputs) {
   const proceed = parse({
     title: pull_request.title,
     labels: pull_request.labels.map(label => label.name.toLowerCase()),
-    config: config({ workspace, target: inputs.target }),
+    config: config({ workspace, inputs }),
     dependencies: dependencies(workspace)
   })
 

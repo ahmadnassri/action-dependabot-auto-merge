@@ -7,8 +7,8 @@ import core from '@actions/core'
 import yaml from 'js-yaml'
 
 // default value is passed from workflow
-export default function ({ workspace, target }) {
-  const configPath = path.join(workspace, '.github', 'auto-merge.yml')
+export default function ({ workspace, inputs }) {
+  const configPath = path.join(workspace, inputs.config)
 
   let config
 
@@ -20,7 +20,7 @@ export default function ({ workspace, target }) {
     core.info('loaded merge config: \n' + configYaml)
   } else {
     // or convert the input "target" to the equivalent config
-    config = [{ match: { dependency_type: 'all', update_type: `semver:${target}` } }]
+    config = [{ match: { dependency_type: 'all', update_type: `semver:${inputs.target}` } }]
     core.info('using workflow\'s "target": \n' + yaml.safeDump(config))
   }
 

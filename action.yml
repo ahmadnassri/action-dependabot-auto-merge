@@ -10,6 +10,11 @@ inputs:
     description: The GitHub token used to merge the pull-request
     required: true
 
+  config:
+    description: Path to configuration file (relative to root)
+    default: .github/auto-merge.yml
+    required: false
+
   command:
     description: The command to pass to Dependabot as a comment
     default: merge
