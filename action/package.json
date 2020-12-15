@@ -18,6 +18,7 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
+    "ajv": "^6.12.6",
     "js-yaml": "^3.14.1",
     "semver": "^7.3.4"
   },

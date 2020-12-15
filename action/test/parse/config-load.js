@@ -17,12 +17,12 @@ tap.test('input.config --> default', async assert => {
 
   sinon.stub(core, 'info') // silence output on terminal
 
-  const expected = [{ match: { dependency_type: 'development', update_type: 'semver:minor' } }]
+  const expected = { rules: [{ dependency_type: 'development', update_type: 'semver:minor' }] }
 
-  const result = config({ workspace, inputs: { } })
+  const result = config({ workspace })
 
   assert.match(core.info.getCall(-1)?.firstArg, 'loaded merge config')
-  assert.match(result, expected)
+  assert.deepEqual(result, expected)
 
   core.info.restore()
 })
@@ -32,27 +32,30 @@ tap.test('input.config --> custom', async assert => {
 
   sinon.stub(core, 'info') // silence output on terminal
 
-  const expected = [{ match: { dependency_type: 'development', update_type: 'semver:minor' } }]
+  const expected = { rules: [{ dependency_type: 'development', update_type: 'semver:minor' }] }
 
-  const result = config({ workspace, inputs: { config: 'config-valid.yml' } })
+  const result = config({ workspace, filename: 'config-valid.yml' })
 
   assert.match(core.info.getCall(-1)?.firstArg, 'loaded merge config')
-  assert.match(result, expected)
+  assert.deepEqual(result, expected)
 
   core.info.restore()
 })
 
 tap.test('input.config --> no file', async assert => {
-  assert.plan(2)
+  assert.plan(3)
 
   sinon.stub(core, 'info') // silence output on terminal
+  sinon.stub(core, 'error')
+  sinon.stub(process, 'exit')
 
-  const expected = [{ match: { dependency_type: 'all', update_type: 'semver:patch' } }]
+  config({})
 
-  const result = config({ inputs: { target: 'patch' } })
+  assert.ok(process.exit.called)
+  assert.equal(process.exit.getCall(0)?.firstArg, 1)
+  assert.equal(core.error.getCall(0)?.firstArg, 'missing config file')
 
-  assert.match(core.info.getCall(-1)?.firstArg, 'using workflow\'s "target":')
-  assert.match(result, expected)
-
+  process.exit.restore()
   core.info.restore()
+  core.error.restore()
 })

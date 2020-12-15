@@ -27,7 +27,7 @@ const weight = {
   patch: 1
 }
 
-export default function ({ title, labels = [], config = [], dependencies = {} }) {
+export default function ({ title, labels = [], dependencies = {}, config: { ignore = [], rules = [] } = {} }) {
   // log
   core.info(`title: "${title}"`)
 
@@ -90,8 +90,16 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
     versionChange = semver.diff(from.version, to.version)
   }
 
+  // exit early if detected an ignore dep
+  for (const { dependency_name } of ignore) {
+    if (new RegExp(dependency_name).test(depName)) {
+      core.info('ignored dependency detected')
+      return process.exit(0) // soft exit
+    }
+  }
+
   // check all configuration variants to see if one matches
-  for (const { match: { dependency_name, dependency_type, update_type } } of config) {
+  for (const { dependency_name, dependency_type, update_type } of rules) {
     if (
       // catch all
       dependency_type === 'all' ||
@@ -108,10 +116,6 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
       core.info(`config: ${dependency_name || dependency_type}:${update_type}`)
 
       switch (true) {
-        case update_type === 'in_range':
-          core.warning('in_range update type not supported yet')
-          return process.exit(0) // soft exit
-
         case update_type === 'all':
           core.info(`${dependency_name || dependency_type}:${update_type} detected, will auto-merge`)
           return true
