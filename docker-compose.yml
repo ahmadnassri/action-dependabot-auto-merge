@@ -8,6 +8,7 @@ services:
       - ./:/tmp/lint
     environment:
       RUN_LOCAL: 'true'
+      LOG_LEVEL: 'ERROR'
       MULTI_STATUS: 'false'
 
   # ---- readme generator ---- #
