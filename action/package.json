@@ -22,7 +22,7 @@
     "semver": "^7.3.4"
   },
   "devDependencies": {
-    "sinon": "^9.2.3",
+    "sinon": "^9.2.4",
     "tap": "^14.11.0"
   }
 }
