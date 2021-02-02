@@ -85,7 +85,7 @@ steps:
 ### Inputs
 
 | input          | required | default                  | description                                         |
-| -------------- | -------- | ------------------------ | --------------------------------------------------- |
+|----------------|----------|--------------------------|-----------------------------------------------------|
 | `github-token` | ✔        | `github.token`           | The GitHub token used to merge the pull-request     |
 | `config`       | ✔        | `.github/auto-merge.yml` | Path to configuration file *(relative to root)*     |
 | `target`       | ❌        | `patch`                  | The version comparison target (major, minor, patch) |
@@ -96,8 +96,8 @@ steps:
 
 The GitHub token is a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with the following scopes:
 
-  - `repo` for private repositories
-  - `public_repo` for public repositories
+-   `repo` for private repositories
+-   `public_repo` for public repositories
 
 The token MUST be created from a user with **`push`** permission to the repository.
 
@@ -107,12 +107,10 @@ The token MUST be created from a user with **`push`** permission to the reposito
 
 Using the configuration file *(specified with `config` input)*, you have the option to provide a more fine-grained configuration. The following example configuration file merges
 
-  - minor updates for `aws-sdk`
-  - minor development dependency updates
-  - patch production dependency updates
-  - minor security-critical production dependency updates
-
-<!-- end list -->
+-   minor updates for `aws-sdk`
+-   minor development dependency updates
+-   patch production dependency updates
+-   minor security-critical production dependency updates
 
 ``` yaml
 - match:
@@ -135,22 +133,22 @@ Using the configuration file *(specified with `config` input)*, you have the opt
 #### Match Properties
 
 | property          | required | supported values                           |
-| ----------------- | -------- | ------------------------------------------ |
+|-------------------|----------|--------------------------------------------|
 | `dependency_name` | ❌        | full name of dependency, or a regex string |
 | `dependency_type` | ❌        | `all`, `production`, `development`         |
 | `update_type`     | ✔        | `all`, `security:*`, `semver:*`            |
 
 > **`update_type`** can specify security match or semver match with the syntax: `${type}:${match}`, e.g.
-> 
->   - **security:patch**  
+>
+> -   **security:patch**  
 >     SemVer patch update that fixes a known security vulnerability
-> 
->   - **semver:patch**  
->     SemVer patch update, e.g. \> 1.x && 1.0.1 to 1.0.3
-> 
->   - **semver:minor**  
->     SemVer minor update, e.g. \> 1.x && 2.1.4 to 2.3.1
-> 
+>
+> -   **semver:patch**  
+>     SemVer patch update, e.g. &gt; 1.x && 1.0.1 to 1.0.3
+>
+> -   **semver:minor**  
+>     SemVer minor update, e.g. &gt; 1.x && 2.1.4 to 2.3.1
+>
 > To allow `prereleases`, the corresponding `prepatch`, `preminor` and `premajor` types are also supported
 
 ###### Defaults
@@ -172,22 +170,22 @@ However, **`in_range` is not supported yet**.
 
 1.  Parsing of *version ranges* is not currently supported
 
-<!-- end list -->
+<!-- -->
 
     Update stone requirement from ==1.* to ==3.*
     requirements: update sphinx-autodoc-typehints requirement from <=1.11.0 to <1.12.0
     Update rake requirement from ~> 10.4 to ~> 13.0
 
-1.  Parsing of non semver numbering is not currently supported
+2.  Parsing of non semver numbering is not currently supported
 
-<!-- end list -->
+<!-- -->
 
     Bump actions/cache from v2.0 to v2.1.2
     chore(deps): bump docker/build-push-action from v1 to v2
 
-1.  Sometimes Dependabot does not include the "from" version, so version comparison logic is impossible:
+3.  Sometimes Dependabot does not include the "from" version, so version comparison logic is impossible:
 
-<!-- end list -->
+<!-- -->
 
     Update actions/setup-python requirement to v2.1.4
     Update actions/cache requirement to v2.1.2
