@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: 14
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
           key: ${{ hashFiles('**/package-lock.json') }}
