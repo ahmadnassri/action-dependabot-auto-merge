@@ -52,8 +52,9 @@ export default function ({
   }
 
   // extract version from the title
-  const from = title.match(new RegExp("from v?" + regex.semver.source))?.groups;
-  const to = title.match(new RegExp("to v?" + regex.semver.source))?.groups;
+  const from = title.match(new RegExp("from v?\\^?" + regex.semver.source))
+    ?.groups;
+  const to = title.match(new RegExp("to v?\\^?" + regex.semver.source))?.groups;
 
   if (!to) {
     core.warning("failed to parse title: no recognizable versions");
@@ -98,7 +99,7 @@ export default function ({
 
   console.log(from.version, to.version);
   if (from && from.version) {
-    versionChange = semverDiff(from.version, to.version);
+    versionChange = semverDiff(from.version.replace("^"), to.version);
   }
   console.log(versionChange);
 
