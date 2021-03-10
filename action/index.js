@@ -9,7 +9,7 @@ import github from '@actions/github'
 import main from './lib/index.js'
 
   // exit early
-if (github.context.eventName !== 'pull_request') {
+if (!['pull_request_target', 'pull_request'].includes(github.context.eventName)) {
   core.error('action triggered outside of a pull_request')
   process.exit(1)
 }
