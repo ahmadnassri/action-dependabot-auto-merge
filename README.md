@@ -62,6 +62,16 @@ steps:
       github-token: ${{ secrets.mytoken }}
 ```
 
+Only merge if the changed dependency version is a `digest`:
+
+``` yaml
+steps:
+  - uses: ahmadnassri/action-dependabot-auto-merge@v2
+    with:
+      target: digest
+      github-token: ${{ secrets.mytoken }}
+```
+
 Using a configuration file:
 
 ###### `.github/workflows/auto-merge.yml`

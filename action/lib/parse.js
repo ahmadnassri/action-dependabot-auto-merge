@@ -6,6 +6,8 @@ import core from '@actions/core'
 const regex = {
   // semver regex
   semver: /(?<version>(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)/,
+  // digest regex
+  digest: /`(?<version>[0-9a-fA-F]{7,40})`/,
   // detect dependency name
   name: /(bump|update) (?<name>(?:@[^\s]+\/)?[^\s]+) (requirement)?/i,
   // detect dependency type from PR title
@@ -18,13 +20,14 @@ const regex = {
 
 const weight = {
   all: 1000,
-  premajor: 6,
-  major: 5,
-  preminor: 4,
-  minor: 3,
-  prepatch: 2,
-  prerelease: 2, // equal to prepatch
-  patch: 1
+  premajor: 7,
+  major: 6,
+  preminor: 5,
+  minor: 4,
+  prepatch: 3,
+  prerelease: 3, // equal to prepatch
+  patch: 2,
+  digest: 1
 }
 
 export default function ({ title, labels = [], config = [], dependencies = {} }) {
@@ -42,18 +45,24 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
   }
 
   // extract version from the title
-  const from = title.match(new RegExp('from v?' + regex.semver.source))?.groups
-  const to = title.match(new RegExp('to v?' + regex.semver.source))?.groups
+  let from = title.match(new RegExp('from v?' + regex.semver.source))?.groups
+  let to = title.match(new RegExp('to v?' + regex.semver.source))?.groups
 
-  if (!to) {
-    core.warning('failed to parse title: no recognizable versions')
-    return process.exit(0) // soft exit
+  let isDigest = false
+
+  if (!from) {
+    from = title.match(new RegExp('from ' + regex.digest.source))?.groups
   }
 
-  // exit early
-  if (!semver.valid(to.version)) {
-    core.warning('failed to parse title: invalid semver')
-    return process.exit(0) // soft exit
+  if (!to) {
+    to = title.match(new RegExp('to ' + regex.digest.source))?.groups
+
+    if (!to) {
+      core.warning('failed to parse title: no recognizable versions')
+      return process.exit(0) // soft exit
+    }
+
+    isDigest = true
   }
 
   // is this a security update?
@@ -82,13 +91,6 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
   core.info(`to: ${to.version}`)
   core.info(`dependency type: ${isProd ? 'production' : 'development'}`)
   core.info(`security critical: ${isSecurity}`)
-
-  // analyze with semver
-  let versionChange
-
-  if (from && from.version) {
-    versionChange = semver.diff(from.version, to.version)
-  }
 
   // check all configuration variants to see if one matches
   for (const { match: { dependency_name, dependency_type, update_type } } of config) {
@@ -128,10 +130,25 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
             return true
           }
 
-          // when there is no "from" version, there is no change detected
-          if (!versionChange) {
-            core.warning('no version range detected in PR title')
-            continue
+          // analyze with semver
+          let versionChange
+
+          if (isDigest) {
+            // this looks like a digest update
+            versionChange = 'digest'
+          } else if (semver.valid(to.version)) {
+            if (from && from.version) {
+              versionChange = semver.diff(from.version, to.version)
+            }
+
+            // when there is no "from" version, there is no change detected
+            if (!versionChange) {
+              core.warning('no version range detected in PR title')
+              continue
+            }
+          } else {
+            core.warning('failed to parse title: unknown version to update to')
+            return process.exit(0) // soft exit
           }
 
           // evaluate weight of detected change
