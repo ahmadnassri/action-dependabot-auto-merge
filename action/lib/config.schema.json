@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+
+  "definitions": {
+    "update_type": {
+      "type": "string",
+      "enum": ["security:patch", "semver:patch", "semver:minor", "all"],
+      "default": "semver:patch"
+    },
+
+    "dependency_type": {
+      "type": "string",
+      "enum": ["development", "production", "all"],
+      "default": "all"
+    },
+
+    "dependency_name": {
+      "type": "string"
+    },
+
+    "match": {
+      "type": "object",
+      "properties": {
+        "dependency_name": { "$ref": "#/definitions/dependency_name" },
+        "dependency_type": { "$ref": "#/definitions/dependency_type" },
+        "update_type": { "$ref": "#/definitions/update_type" }
+      }
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "command": {
+      "description": "The command to pass to Dependabot as a comment",
+      "type": "string",
+      "enum": ["merge", "squash and merge"],
+      "default": "merge"
+    },
+
+    "approve": {
+      "description": "Auto-approve pull-requests",
+      "type": "boolean",
+      "default": true
+    },
+
+    "rules": {
+      "type": "array",
+      "default": [],
+      "items": { "$ref": "#/definitions/match" }
+    },
+    "ignore": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "properties": {
+          "dependency_name": { "$ref": "#/definitions/dependency_name" }
+        }
+      }
+    }
+  }
+}

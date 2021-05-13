@@ -8,8 +8,10 @@ import fs from 'fs'
 // module
 import parse from '../../lib/parse.js'
 
-function config (update_type) {
-  return [{ match: { dependency_type: 'all', update_type } }]
+function config (update_type) { // eslint-disable-line camelcase
+  return {
+    rules: [{ dependency_type: 'all', update_type }]
+  }
 }
 
 tap.test('title -> in range', async assert => {

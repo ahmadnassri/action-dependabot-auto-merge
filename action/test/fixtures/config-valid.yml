@@ -1,3 +1,3 @@
-- match:
-    dependency_type: development
+rules:
+  - dependency_type: development
     update_type: semver:minor

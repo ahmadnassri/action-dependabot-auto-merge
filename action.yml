@@ -15,21 +15,6 @@ inputs:
     default: .github/auto-merge.yml
     required: false
 
-  command:
-    description: The command to pass to Dependabot as a comment
-    default: merge
-    required: false
-
-  approve:
-    description: Auto-approve pull-requests
-    default: 'true'
-    required: false
-
-  target:
-    description: The version comparison target (major, minor, patch). This is ignored if .github/auto-merge.yml exists
-    default: patch
-    required: false
-
 runs:
   using: docker
   image: docker://ghcr.io/ahmadnassri/action-dependabot-auto-merge:v2

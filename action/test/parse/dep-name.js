@@ -9,7 +9,9 @@ import fs from 'fs'
 import parse from '../../lib/parse.js'
 
 function config (dep, target) {
-  return [{ match: { dependency_name: dep, update_type: `semver:${target}` } }]
+  return {
+    rules: [{ dependency_name: dep, update_type: `semver:${target}` }]
+  }
 }
 
 tap.test('title -> in range', async assert => {
@@ -95,7 +97,7 @@ tap.test('parse -> edge cases', async assert => {
   sinon.stub(fs, 'existsSync').returns(false)
 
   for (const title of titles) {
-    assert.ok(parse({ title: title.message, config: [{ match: { dependency_name: title.name, update_type: 'all' } }] }))
+    assert.ok(parse({ title: title.message, config: { rules: [{ dependency_name: title.name, update_type: 'all' }] } }))
     assert.ok(core.info.called)
     assert.equal(core.info.getCall(1)?.firstArg, `depName: ${title.name}`)
 

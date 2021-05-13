@@ -7,7 +7,9 @@ import core from '@actions/core'
 import parse from '../../lib/parse.js'
 
 function config (target) {
-  return [{ match: { dependency_type: 'all', update_type: `semver:${target}` } }]
+  return {
+    rules: [{ dependency_type: 'all', update_type: `semver:${target}` }]
+  }
 }
 
 tap.test('parse -> pre-release -> direct match', async assert => {

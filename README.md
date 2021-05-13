@@ -25,74 +25,20 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
-          target: minor
+          config: .github/auto-merge.yml
           github-token: ${{ secrets.mytoken }}
 ```
 
-The action will only merge PRs whose checks (CI/CD) pass.
-
-### Examples
-
-Minimal setup:
-
-``` yaml
-steps:
-  - uses: ahmadnassri/action-dependabot-auto-merge@v2
-    with:
-      github-token: ${{ secrets.mytoken }}
-```
-
-Only merge if the changed dependency version is a `patch` *(default behavior)*:
-
-``` yaml
-steps:
-  - uses: ahmadnassri/action-dependabot-auto-merge@v2
-    with:
-      target: patch
-      github-token: ${{ secrets.mytoken }}
-```
-
-Only merge if the changed dependency version is a `minor`:
-
-``` yaml
-steps:
-  - uses: ahmadnassri/action-dependabot-auto-merge@v2
-    with:
-      target: minor
-      github-token: ${{ secrets.mytoken }}
-```
-
-Using a configuration file:
-
-###### `.github/workflows/auto-merge.yml`
-
-``` yaml
-steps:
-  - uses: actions/checkout@v2
-  - uses: ahmadnassri/action-dependabot-auto-merge@v2
-    with:
-      github-token: ${{ secrets.mytoken }}
-```
-
-###### `.github/auto-merge.yml`
-
-``` yaml
-- match:
-    dependency_type: all
-    update_type: "semver:minor" # includes patch updates!
-```
+> **Note**: The action will only merge PRs whose checks (CI/CD) pass.
 
 ### Inputs
 
-| input          | required | default                  | description                                         |
-|----------------|----------|--------------------------|-----------------------------------------------------|
-| `github-token` | ✔        | `github.token`           | The GitHub token used to merge the pull-request     |
-| `config`       | ✔        | `.github/auto-merge.yml` | Path to configuration file *(relative to root)*     |
-| `target`       | ❌        | `patch`                  | The version comparison target (major, minor, patch) |
-| `command`      | ❌        | `merge`                  | The command to pass to Dependabot                   |
-| `approve`      | ❌        | `true`                   | Auto-approve pull-requests                          |
+| input          | required | default                  | description                                     |
+|----------------|----------|--------------------------|-------------------------------------------------|
+| `github-token` | ✔        | `github.token`           | The GitHub token used to merge the pull-request |
+| `config`       | ✔        | `.github/auto-merge.yml` | Path to configuration file *(relative to root)* |
 
-### Token Scope
+#### Token Scope
 
 The GitHub token is a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with the following scopes:
 
@@ -103,34 +49,46 @@ The token MUST be created from a user with **`push`** permission to the reposito
 
 > ℹ *see reference for [user owned repos](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository) and for [org owned repos](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization)*
 
-### Configuration file syntax
+### Configuration File
 
-Using the configuration file *(specified with `config` input)*, you have the option to provide a more fine-grained configuration. The following example configuration file merges
+A configuration file is **REQUIRED** to successfully determine the
 
--   minor updates for `aws-sdk`
--   minor development dependency updates
--   patch production dependency updates
--   minor security-critical production dependency updates
+The syntax is loosely based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/), with `ignore` and `rules` resembling [`ignored_updates`](https://dependabot.com/docs/config-file/#ignored_updates) and [`automerged_updates`](https://dependabot.com/docs/config-file/#automerged_updates) respectively.
+
+###### Example
+
+minimal configuration:
 
 ``` yaml
-- match:
-    dependency_name: aws-sdk
+rules:
+  - dependency_type: all
     update_type: semver:minor
-
-- match:
-    dependency_type: development
-    update_type: semver:minor # includes patch updates!
-
-- match:
-    dependency_type: production
-    update_type: security:minor # includes patch updates!
-
-- match:
-    dependency_type: production
-    update_type: semver:patch
 ```
 
-#### Match Properties
+advanced configuration:
+
+``` yaml
+# ignore certain dependencies
+ignore: 
+  - dependency_name: react-router
+  - dependency_name: react-*
+
+# auto merge rules
+rules: 
+  # rule for specific dependency
+  - dependency_name: aws-sdk
+    update_type: semver:minor
+
+  # rule per dependency type
+  - dependency_type: development
+    update_type: semver:minor
+
+  # rule per update type
+  - dependency_type: production
+    update_type: security:minor
+```
+
+#### Properties
 
 | property          | required | supported values                           |
 |-------------------|----------|--------------------------------------------|
@@ -150,21 +108,6 @@ Using the configuration file *(specified with `config` input)*, you have the opt
 >     SemVer minor update, e.g. &gt; 1.x && 2.1.4 to 2.3.1
 >
 > To allow `prereleases`, the corresponding `prepatch`, `preminor` and `premajor` types are also supported
-
-###### Defaults
-
-By default, if no configuration file is present in the repo, the action will assume the following:
-
-``` yaml
-- match:
-    dependency_type: all
-    update_type: semver:${TARGET}
-```
-
-> Where `$TARGET` is the `target` value from the action [Inputs](#inputs)
-
-The syntax is based on the [legacy dependaBot v1 config format](https://dependabot.com/docs/config-file/#automerged_updates).
-However, **`in_range` is not supported yet**.
 
 ## Exceptions and Edge Cases
 

@@ -7,7 +7,9 @@ import core from '@actions/core'
 // module
 import parse from '../../lib/parse.js'
 
-const config = [{ match: { dependency_type: 'all', update_type: 'semver:major' } }]
+const config = {
+  rules: [{ dependency_type: 'all', update_type: 'semver:major' }]
+}
 
 const dependencies = {
   prod: {
