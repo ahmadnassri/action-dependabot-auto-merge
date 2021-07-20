@@ -16,7 +16,7 @@ Automatically merge Dependabot PRs when version comparison is within range.
 name: auto-merge
 
 on:
-  pull_request:
+  pull_request_target:
 
 jobs:
   auto-merge:
