@@ -20,6 +20,11 @@ inputs:
     default: merge
     required: false
 
+  botName:
+    description: The bot to tag in approve/comment message. You can use this to create your own merge bot.
+    default: dependabot
+    required: false
+
   approve:
     description: Auto-approve pull-requests
     default: 'true'
