@@ -58,7 +58,7 @@ Only merge if the changed dependency version is a `minor`:
 steps:
   - uses: ahmadnassri/action-dependabot-auto-merge@v2
     with:
-      target: minor
+      target: minor # includes patch updates!
       github-token: ${{ secrets.mytoken }}
 ```
 
