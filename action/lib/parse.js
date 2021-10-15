@@ -41,9 +41,9 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
     return process.exit(0) // soft exit
   }
 
-  // extract version from the title
-  const from = title.match(new RegExp('from v?' + regex.semver.source))?.groups
-  const to = title.match(new RegExp('to v?' + regex.semver.source))?.groups
+  // extract version from the title, allowing for constraints (~,^,>=) and v prefix
+  const from = title.match(new RegExp('from \D*' + regex.semver.source))?.groups
+  const to = title.match(new RegExp('to \D*' + regex.semver.source))?.groups
 
   if (!to) {
     core.warning('failed to parse title: no recognizable versions')
