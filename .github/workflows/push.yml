@@ -160,7 +160,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    if: ${{ needs.metadata.outputs.dockerfile == 'yes' }}
+    if: ${{ needs.metadata.outputs.dockerfile == 'yes' && needs.release.outputs.published == 'true'}}
 
     steps:
       - uses: actions/checkout@v2.3.5
