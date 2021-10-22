@@ -110,9 +110,9 @@ jobs:
 
     outputs:
       published: ${{ steps.release.outputs.published }}
-      release-version: ${{ steps.release.outputs.release-version }}
-      release-version-major: ${{ steps.release.outputs.release-version-major }}
-      release-version-minor: ${{ steps.release.outputs.release-version-minor }}
+      version: ${{ steps.release.outputs.release-version }}
+      version-major: ${{ steps.release.outputs.release-version-major }}
+      version-minor: ${{ steps.release.outputs.release-version-minor }}
 
     steps:
       - uses: actions/checkout@v2.3.5
@@ -135,8 +135,8 @@ jobs:
     strategy:
       matrix:
         alias:
-          - version: v${{ needs.release.outputs.release-version-major }}
-          - version: v${{ needs.release.outputs.release-version-major }}.${{ needs.release.outputs.release-version-minor }}
+          - version: v${{ needs.release.outputs.version-major }}
+          - version: v${{ needs.release.outputs.version-major }}.${{ needs.release.outputs.version-minor }}
 
     steps:
       - uses: actions/github-script@v3
@@ -197,17 +197,17 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
           tags: |
             ${{ github.event.repository.full_name }}:latest
-            ${{ github.event.repository.full_name }}:v${{ needs.release.outputs.release-version-major }}.${{ needs.release.outputs.release-version-minor }}
-            ${{ github.event.repository.full_name }}:v${{ needs.release.outputs.release-version-major }}
-            ${{ github.event.repository.full_name }}:v${{ needs.release.outputs.release-version }}
+            ${{ github.event.repository.full_name }}:v${{ needs.release.outputs.version-major }}.${{ needs.release.outputs.version-minor }}
+            ${{ github.event.repository.full_name }}:v${{ needs.release.outputs.version-major }}
+            ${{ github.event.repository.full_name }}:v${{ needs.release.outputs.version }}
             ghcr.io/${{ github.event.repository.full_name }}:latest
-            ghcr.io/${{ github.event.repository.full_name }}:v${{ needs.release.outputs.release-version-major }}.${{ needs.release.outputs.release-version-minor }}
-            ghcr.io/${{ github.event.repository.full_name }}:v${{ needs.release.outputs.release-version-major }}
-            ghcr.io/${{ github.event.repository.full_name }}:v${{ needs.release.outputs.release-version }}
+            ghcr.io/${{ github.event.repository.full_name }}:v${{ needs.release.outputs.version-major }}.${{ needs.release.outputs.version-minor }}
+            ghcr.io/${{ github.event.repository.full_name }}:v${{ needs.release.outputs.version-major }}
+            ghcr.io/${{ github.event.repository.full_name }}:v${{ needs.release.outputs.version }}
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}
             org.opencontainers.image.url=${{ github.event.repository.html_url }}
-            org.opencontainers.image.version=${{ needs.release.outputs.release-version }}
+            org.opencontainers.image.version=${{ needs.release.outputs.version }}
             org.opencontainers.image.source=${{ github.event.repository.clone_url }}
             org.opencontainers.image.revision=${{ github.sha }}
 
