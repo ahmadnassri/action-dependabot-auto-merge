@@ -14,7 +14,7 @@ export default function ({ workspace, inputs }) {
   if (fs.existsSync(configPath)) {
     // parse .github/auto-merge.yml
     const configYaml = fs.readFileSync(configPath, 'utf8')
-    const config = yaml.safeLoad(configYaml)
+    const config = yaml.load(configYaml)
     core.info('loaded merge config: \n' + configYaml)
 
     return config
@@ -22,7 +22,7 @@ export default function ({ workspace, inputs }) {
 
   // or convert the input "target" to the equivalent config
   const config = [{ match: { dependency_type: 'all', update_type: `semver:${inputs.target}` } }]
-  core.info('using workflow\'s "target": \n' + yaml.safeDump(config))
+  core.info('using workflow\'s "target": \n' + yaml.dump(config))
 
   return config
 }

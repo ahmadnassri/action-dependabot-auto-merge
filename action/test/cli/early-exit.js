@@ -26,6 +26,6 @@ tap.test('main -> not dependabot', assert => {
 
   pexec('node index.js')
     .then(({ code, stdout }) => {
-      assert.equal(stdout.trim(), '::warning::expected PR by "dependabot[bot]", found "foo" instead')
+      assert.equal(stdout.trim(), '::warning::exiting early - expected PR by "dependabot[bot]", found "foo" instead')
     })
 })
