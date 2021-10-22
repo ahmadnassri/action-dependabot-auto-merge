@@ -1,0 +1,79 @@
+# ------------------------------------------------------------- #
+# Note: this file is automatically managed in template-template #
+# ------------------------------------------------------------- #
+
+on: pull_request_target
+
+name: pull_request_target
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+
+    outputs:
+      repository: ${{ steps.metadata.outputs.repository }}
+
+    steps:
+      - uses: actions/checkout@v2.3.5
+
+      - uses: ahmadnassri/action-metadata@v1
+        id: metadata
+
+  auto-merge:
+    timeout-minutes: 5
+
+    runs-on: ubuntu-latest
+
+    # only run for dependabot PRs
+    if: ${{ github.actor == 'dependabot[bot]' }}
+
+    env:
+      PR_URL: ${{github.event.pull_request.html_url}}
+      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    steps:
+      - id: dependabot
+        uses: dependabot/fetch-metadata@v1.1.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: auto merge conditions
+        id: auto-merge
+        if: |
+          (
+            steps.dependabot.outputs.update-type == 'version-update:semver-patch' &&
+            contains('direct:production,indirect:production', steps.dependabot.outputs.dependency-type)
+          ) || (
+            steps.dependabot.outputs.update-type == 'version-update:semver-minor' &&
+            contains('direct:development,indirect:development', steps.dependabot.outputs.dependency-type)
+          )
+        run: echo "::notice ::auto-merge conditions satisfied"
+
+      - name: auto approve pr
+        if: ${{ steps.auto-merge.conclusion == 'success' }}
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --rebase "$PR_URL"
+
+  template-sync:
+    needs: metadata
+
+    timeout-minutes: 20
+
+    runs-on: ubuntu-latest
+
+    # only run for templates
+    if: ${{ fromJSON(needs.metadata.outputs.repository).is_template }}
+
+    steps:
+      - uses: actions/checkout@v2.3.5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: ahmadnassri/action-workflow-queue@v1.1
+      - uses: ahmadnassri/action-template-repository-sync@v1.6.0
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
