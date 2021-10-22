@@ -26,7 +26,8 @@ export default async function (inputs) {
 
   if (proceed) {
     const command = inputs.approve === 'true' ? approve : comment
+    const botName = inputs.botName || 'dependabot'
 
-    await command(octokit, repo, pull_request, `@dependabot ${inputs.command}`)
+    await command(octokit, repo, pull_request, `@${botName} ${inputs.command}`)
   }
 }
