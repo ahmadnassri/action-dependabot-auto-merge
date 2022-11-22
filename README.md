@@ -102,6 +102,8 @@ The GitHub token is a [Personal Access Token](https://docs.github.com/en/github/
 
 The token MUST be created from a user with **`push`** permission to the repository.
 
+Create the token in the *Repository* > `Settings` > `Secrets` > `Depandabot` section.
+
 > ℹ *see reference for [user owned repos](https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository) and for [org owned repos](https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization)*
 
 ### Configuration file syntax
