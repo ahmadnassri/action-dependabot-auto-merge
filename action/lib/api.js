@@ -1,5 +1,5 @@
 export async function approve (octokit, repo, { number }, body) {
-  await octokit.pulls.createReview({
+  await octokit.rest.pulls.createReview({
     ...repo,
     pull_number: number,
     event: 'APPROVE',
@@ -8,7 +8,7 @@ export async function approve (octokit, repo, { number }, body) {
 }
 
 export async function comment (octokit, repo, { number }, body) {
-  await octokit.issues.createComment({
+  await octokit.rest.issues.createComment({
     ...repo,
     issue_number: number,
     body
