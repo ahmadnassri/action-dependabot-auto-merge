@@ -26,6 +26,20 @@ tap.test('main -> not dependabot', assert => {
 
   pexec('node index.js')
     .then(({ code, stdout }) => {
-      assert.equal(stdout.trim(), '::warning::exiting early - expected PR by "dependabot[bot]", found "foo" instead')
+      assert.equal(stdout.trim(), '::warning::exiting early - expected PR by "dependabot[bot],dependabot-preview[bot]", found "foo" instead')
+    })
+})
+
+tap.test('main -> allow sender bar', assert => {
+  assert.plan(1)
+
+  process.env.INPUT_ACCEPTSENDER = 'bar'
+
+  process.env.GITHUB_EVENT_NAME = 'pull_request'
+  process.env.GITHUB_EVENT_PATH = path.join(path.resolve(), 'test', 'cli', 'event.json')
+
+  pexec('node index.js')
+    .then(({ code, stdout }) => {
+      assert.equal(stdout.trim(), '::warning::exiting early - expected PR by "dependabot[bot],dependabot-preview[bot],bar", found "foo" instead')
     })
 })
