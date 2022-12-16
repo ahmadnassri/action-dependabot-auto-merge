@@ -84,14 +84,15 @@ steps:
 
 ### Inputs
 
-| input          | required | default                  | description                                         |
-|----------------|----------|--------------------------|-----------------------------------------------------|
-| `github-token` | ✔        | `github.token`           | The GitHub token used to merge the pull-request     |
-| `config`       | ✔        | `.github/auto-merge.yml` | Path to configuration file *(relative to root)*     |
-| `target`       | ❌        | `patch`                  | The version comparison target (major, minor, patch) |
-| `command`      | ❌        | `merge`                  | The command to pass to Dependabot                   |
-| `botName`      | ❌        | `dependabot`             | The bot to tag in approve/comment message.          |
-| `approve`      | ❌        | `true`                   | Auto-approve pull-requests                          |
+| input          | required | default                | description                                                                            |
+|----------------|----------|------------------------|----------------------------------------------------------------------------------------|
+| `github-token` | ✔        | `github.token`         | The GitHub token used to merge the pull-request                                        |
+| `config`       | ✔        | `.github/auto-merge.yml` | Path to configuration file *(relative to root)*                                        |
+| `target`       | ❌        | `patch`                | The version comparison target (major, minor, patch)                                    |
+| `command`      | ❌        | `merge`                | The command to pass to Dependabot                                                      |
+| `botName`      | ❌        | `dependabot`           | The bot to tag in approve/comment message.                                             |
+| `approve`      | ❌        | `true`                 | Auto-approve pull-requests                                                             |
+| `acceptSender` | ❌        |                        | Act on PRs raised by this sender. By default only PRs from `dependabot` are considered |
 
 ### Token Scope
 

@@ -17,9 +17,15 @@ if (!['pull_request_target', 'pull_request'].includes(github.context.eventName))
 // extract the title
 const { payload: { sender } } = github.context // eslint-disable-line camelcase
 
-// exit early if PR is not by dependabot
-if (!sender || !['dependabot[bot]', 'dependabot-preview[bot]'].includes(sender.login)) {
-  core.warning(`exiting early - expected PR by "dependabot[bot]", found "${sender ? sender.login : 'no-sender'}" instead`)
+// exit early if PR is not by dependabot or an allowedSender
+function allowedSenders() {
+  return ['dependabot[bot]', 'dependabot-preview[bot]'].concat([
+    core.getInput('acceptSender', { required: false }),
+  ]).filter(s => s && s.length > 0)
+}
+
+if (!sender || !allowedSenders().includes(sender.login)) {
+  core.warning(`exiting early - expected PR by "${allowedSenders().join(",")}", found "${sender ? sender.login : 'no-sender'}" instead`)
   process.exit(0)
 }
 
