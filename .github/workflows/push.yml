@@ -102,7 +102,7 @@ jobs:
       - release
       - metadata
 
-    timeout-minutes: 15
+    timeout-minutes: 30
 
     if: ${{ needs.release.outputs.published == 'true' }}
 
