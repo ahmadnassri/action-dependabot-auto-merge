@@ -37,4 +37,4 @@ inputs:
 
 runs:
   using: docker
-  image: docker://ghcr.io/ahmadnassri/action-dependabot-auto-merge:v2
+  image: docker://ghcr.io/ahmadnassri/action-dependabot-auto-merge:2.6.5
