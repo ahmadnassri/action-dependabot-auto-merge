@@ -21,7 +21,7 @@ jobs:
       repository_is_template: ${{ steps.metadata.outputs.repository_is_template }}
 
     steps:
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.2.0
 
       - uses: ahmadnassri/action-metadata@v2.1.2
         id: metadata
@@ -72,7 +72,7 @@ jobs:
     if: ${{ needs.metadata.outputs.repository_is_template == 'true' }}
 
     steps:
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.2.0
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
