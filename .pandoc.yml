@@ -1,0 +1,15 @@
+# ----------------------------------------------- #
+# Note: this file originates in template-template #
+# ----------------------------------------------- #
+
+input-file: docs/README.md
+output-file: README.md
+metadata-file: colophon.yml
+template: docs/README.template
+
+from: gfm
+to: gfm
+
+wrap: preserve
+reference-links: true
+fail-if-warnings: false

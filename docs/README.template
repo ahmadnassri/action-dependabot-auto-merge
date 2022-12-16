@@ -4,9 +4,6 @@ $about.description$
 
 [![license][license-img]][license-url]
 [![release][release-img]][release-url]
-[![super linter][super-linter-img]][super-linter-url]
-[![test][test-img]][test-url]
-[![semantic][semantic-img]][semantic-url]
 
 $body$
 
@@ -19,12 +16,3 @@ $body$
 
 [release-url]: https://github.com/$about.repository$/releases
 [release-img]: https://badgen.net/github/release/$about.repository$
-
-[super-linter-url]: https://github.com/$about.repository$/actions?query=workflow%3Asuper-linter
-[super-linter-img]: https://github.com/$about.repository$/workflows/super-linter/badge.svg
-
-[test-url]: https://github.com/$about.repository$/actions?query=workflow%3Atest
-[test-img]: https://github.com/$about.repository$/workflows/test/badge.svg
-
-[semantic-url]: https://github.com/$about.repository$/actions?query=workflow%3Arelease
-[semantic-img]: https://badgen.net/badge/📦/semantically%20released/blue
