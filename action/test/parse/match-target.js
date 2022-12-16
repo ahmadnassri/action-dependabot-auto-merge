@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 // packages
 import tap from 'tap'
 import sinon from 'sinon'

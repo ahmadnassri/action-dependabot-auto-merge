@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 // packages
 import github from '@actions/github'
 
