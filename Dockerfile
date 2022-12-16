@@ -11,6 +11,6 @@ WORKDIR /action
 
 COPY action ./
 
-RUN npm ci --only=prod
+RUN npm ci --omit=dev
 
 ENTRYPOINT ["node", "/action/index.js"]
