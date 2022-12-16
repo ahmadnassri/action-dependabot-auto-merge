@@ -1,38 +1,34 @@
-version: '3.8'
+# ---------------------------------------------------- #
+# Note: this file originates in template-action-docker #
+# ---------------------------------------------------- #
 
 services:
-  # ---- super-linter ---- #
+  # ---- mega-linter ---- #
   lint:
-    image: github/super-linter:v3
+    profiles: ["dev"]
+    image: oxsecurity/megalinter-javascript:v6.14.0
     volumes:
       - ./:/tmp/lint
     environment:
-      RUN_LOCAL: 'true'
-      LOG_LEVEL: 'ERROR'
-      MULTI_STATUS: 'false'
+      MEGALINTER_CONFIG: .github/linters/.mega-linter.yml
+      REPORT_OUTPUT_FOLDER: none
+      VALIDATE_ALL_CODEBASE: true
 
   # ---- readme generator ---- #
   readme:
-    image: pandoc/core:2.11.4
+    profiles: ["dev"]
+    image: pandoc/minimal:2.18.0
     volumes:
       - ./:/data
-    command: >-
-      --metadata-file=colophon.yml
-      --template=docs/README.template
-      --output=README.md
-      --from=gfm
-      --to=gfm
-      --fail-if-warnings
-      --wrap=preserve
-      docs/README.md
+    command: --defaults=.pandoc.yml
 
-  test:
+  # ---- app ---- #
+  app:
+    profiles: ["app"]
+    privileged: true
     build: .
-    tty: true
+    working_dir: /github/workspace
     volumes:
-      - type: bind
-        source: ./action
-        target: /action/
-    working_dir: /action
-    entrypoint: npm run
-    command: test
+      - ./:/github/workspace
+    env_file:
+      - .env

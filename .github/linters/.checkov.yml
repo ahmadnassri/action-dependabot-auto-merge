@@ -2,7 +2,11 @@
 # Note: this file originates in template-template #
 # ----------------------------------------------- #
 
-extends:
-  - "@commitlint/config-conventional"
-rules:
-  body-max-line-length: [2, 'always', 200]
+quiet: true
+skip-check:
+  - CKV_DOCKER_2
+  - CKV_GHA_3
+  - BC_DKR_3
+  - CKV_GIT_1
+  - CKV_GIT_5
+  - CKV_GIT_6

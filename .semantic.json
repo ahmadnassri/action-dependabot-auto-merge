@@ -17,8 +17,8 @@
       "preset": "conventionalcommits",
       "presetConfig": {
         "types": [
+          { "type": "chore",    "section": "Chores",      "hidden": true },
           { "type": "build",    "section": "Build",       "hidden": false },
-          { "type": "chore",    "section": "Chores",      "hidden": false },
           { "type": "ci",       "section": "CI/CD",       "hidden": false },
           { "type": "docs",     "section": "Docs",        "hidden": false },
           { "type": "feat",     "section": "Features",    "hidden": false },
@@ -30,6 +30,15 @@
         ]
       }
     }],
-    "@semantic-release/github"
+    ["@semantic-release/exec", {
+      "prepareCmd": "sed -Ei 's/:[0-9,\\.]+/:${nextRelease.version}/g' action.yml"
+    }],
+    ["@semantic-release/git", {
+      "assets": ["action.yml"],
+      "message": "chore(release): bump to ${nextRelease.version} [skip ci]"
+    }],
+    ["@semantic-release/github", {
+      "successComment": false
+    }]
   ]
 }

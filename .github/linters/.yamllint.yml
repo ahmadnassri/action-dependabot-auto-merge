@@ -1,0 +1,17 @@
+# ----------------------------------------------- #
+# Note: this file originates in template-template #
+# ----------------------------------------------- #
+
+extends: default
+
+rules:
+  brackets:
+    max-spaces-inside: 1
+  document-start:
+    present: false
+  truthy:
+    check-keys: false
+  line-length:
+    max: 500
+  comments:
+    min-spaces-from-content: 1

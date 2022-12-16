@@ -1,0 +1,42 @@
+# ----------------------------------------------- #
+# Note: this file originates in template-template #
+# ----------------------------------------------- #
+
+ENABLE:
+  - ACTION
+  - BASH
+  - MAKEFILE
+  - REPOSITORY
+  - TERRAFORM
+  - HTML
+  - ENV
+  - JAVASCRIPT
+  - JSX
+  - EDITORCONFIG
+  - JSON
+  - DOCKERFILE
+  - MARKDOWN
+  - YAML
+  - CSS
+  - OPENAPI
+  - SQL
+
+DISABLE_LINTERS:
+  - JSON_PRETTIER
+  - JAVASCRIPT_PRETTIER
+  - YAML_PRETTIER
+  - REPOSITORY_TRIVY
+  - REPOSITORY_DEVSKIM
+  - TERRAFORM_CHECKOV
+
+CONFIG_REPORTER: false
+FAIL_IF_MISSING_LINTER_IN_FLAVOR: true
+FLAVOR_SUGGESTIONS: false
+LOG_LEVEL: INFO
+MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
+PRINT_ALPACA: false
+SHOW_ELAPSED_TIME: true
+VALIDATE_ALL_CODEBASE: false
+IGNORE_GENERATED_FILES: true
+FILTER_REGEX_EXCLUDE: (dist/*|README.md|test/fixtures/*|vendor/*|/schemas/*)
+REPOSITORY_CHECKOV_ARGUMENTS: [--skip-path, schemas]
