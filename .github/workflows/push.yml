@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3.2.0
 
-      - uses: oxsecurity/megalinter/flavors/javascript@v6.15.0
+      - uses: oxsecurity/megalinter/flavors/javascript@v6.16.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
           MEGALINTER_CONFIG: .github/linters/.mega-linter.yml
