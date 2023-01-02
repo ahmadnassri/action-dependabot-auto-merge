@@ -89,6 +89,7 @@ steps:
 | `command`      | ❌       | `merge`                  | The command to pass to Dependabot                   |
 | `botName`      | ❌       | `dependabot`             | The bot to tag in approve/comment message.          |
 | `approve`      | ❌       | `true`                   | Auto-approve pull-requests                          |
+| `merge`        | ❌       | `true`                   | Auto-merge pull-requests                            |
 
 ### Token Scope
 

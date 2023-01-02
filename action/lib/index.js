@@ -29,7 +29,13 @@ export default async function (inputs) {
   if (proceed) {
     const command = inputs.approve === 'true' ? approve : comment
     const botName = inputs.botName || 'dependabot'
+    const merge = (inputs.merge === 'true')
 
-    await command(octokit, repo, pull_request, `@${botName} ${inputs.command}`)
+    if (!merge && inputs.approve === 'true') {
+      await command(octokit, repo, pull_request, ``)
+    }
+    else {
+      await command(octokit, repo, pull_request, `@${botName} ${inputs.command}`)
+    }
   }
 }
