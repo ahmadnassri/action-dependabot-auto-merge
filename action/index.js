@@ -30,7 +30,8 @@ const inputs = {
   target: core.getInput('target', { required: false }),
   command: core.getInput('command', { required: false }),
   botName: core.getInput('botName', { required: false }),
-  approve: core.getInput('approve', { required: false })
+  approve: core.getInput('approve', { required: false }),
+  strategy: core.getInput('strategy', { required: false })
 }
 
 // error handler

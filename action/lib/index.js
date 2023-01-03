@@ -27,9 +27,16 @@ export default async function (inputs) {
   })
 
   if (proceed) {
-    const command = inputs.approve === 'true' ? approve : comment
     const botName = inputs.botName || 'dependabot'
 
-    await command(octokit, repo, pull_request, `@${botName} ${inputs.command}`)
+    if (inputs.approve === 'approve-only') {
+      await approve(octokit, repo, pull_request, ``)
+    } else if (inputs.approve === 'merge-only') {
+      await comment(octokit, repo, pull_request, `@${botName} ${inputs.command}`)
+    } else {
+      // legacy code for backward compatibility
+      const command = inputs.approve === 'true' ? approve : comment
+      await command(octokit, repo, pull_request, `@${botName} ${inputs.command}`)
+    }
   }
 }

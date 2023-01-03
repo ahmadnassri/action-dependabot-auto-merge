@@ -30,6 +30,11 @@ inputs:
     default: 'true'
     required: false
 
+  strategy:
+    description: Action to perform for merge
+    default: 'approve-and-merge'
+    required: false
+
   target:
     description: The version comparison target (major, minor, patch). This is ignored if .github/auto-merge.yml exists
     default: patch
