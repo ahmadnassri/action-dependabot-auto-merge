@@ -156,7 +156,7 @@ By default, if no configuration file is present in the repo, the action will ass
 ``` yaml
 - match:
     dependency_type: all
-    update_type: semver:${TARGET}
+    update_type: semver:${STABLE}
 ```
 
 > Where `$TARGET` is the `target` value from the action [Inputs][]
