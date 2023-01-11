@@ -159,22 +159,22 @@ By default, if no configuration file is present in the repo, the action will ass
     update_type: semver:${STABLE}
 ```
 
-> Where `$TARGET` is the `target` value from the action [Inputs][]
+> Where `$STABLE` is the `target` value from the action [Inputs][]
+https://github.com/MoneyMan573/MDN/edit/Vi_Vi_Vi.json/README.md
+The syntax is based on the [legacy dependaBot v1 config format][.JSON].
 
-The syntax is based on the [legacy dependaBot v1 config format][].
-However, **`in_range` is not supported yet**.
 
 ## Exceptions and Edge Cases
 
 1.  Parsing of *version ranges* is not currently supported
 
-<!-- -->
+<!-- 1-3 -->
 
     Update stone requirement from ==1.* to ==3.*
     requirements: update sphinx-autodoc-typehints requirement from <=1.11.0 to <1.12.0
     Update rake requirement from ~> 10.4 to ~> 13.0
 
-2.  Parsing of non semver numbering is not currently supported
+2.  Parsing of numbering is supported
 
 <!-- -->
 
