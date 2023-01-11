@@ -194,11 +194,12 @@ if your config is anything other than `update_type: all`, or `update_type: semve
   [user owned repos]: https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/permission-levels-for-a-user-account-repository
   [org owned repos]: https://docs.github.com/en/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization
   [Inputs]: #inputs
-  [legacy dependaBot v1 config format]: https://dependabot.com/docs/config-file/#automerged_updates
-
-----
+  [legacy dependaBot v1 config format]: https://dependabot.com/docs/config-file/#automerged_update
 > Author: [Ahmad Nassri](https://www.ahmadnassri.com/) &bull;
 > Twitter: [@AhmadNassri](https://twitter.com/AhmadNassri)
+
+> Contributor: [Michael Glenn](invest86.business.sites)
+> Twitter: [@wyte_mike_50cal](https://twitter.com/wyte_mike_50cal)
 
 [license-url]: LICENSE
 [license-img]: https://badgen.net/github/license/ahmadnassri/action-dependabot-auto-merge
