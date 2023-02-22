@@ -17,9 +17,11 @@ if (!['pull_request_target', 'pull_request'].includes(github.context.eventName))
 // extract the title
 const { payload: { sender } } = github.context // eslint-disable-line camelcase
 
+const allowedUsers = core.getInput('allowed_users', { required: true });
+
 // exit early if PR is not by dependabot
-if (!sender || !['dependabot[bot]', 'dependabot-preview[bot]'].includes(sender.login)) {
-  core.warning(`exiting early - expected PR by "dependabot[bot]", found "${sender ? sender.login : 'no-sender'}" instead`)
+if (!sender || !allowedUsers.includes(sender.login)) {
+  core.warning(`exiting early - expected PR by "${allowedUsers}", found "${sender ? sender.login : 'no-sender'}" instead`)
   process.exit(0)
 }
 
