@@ -35,6 +35,11 @@ inputs:
     default: patch
     required: false
 
+  allowed_users:
+    description: List of users that are allowed to send pull requests
+    default: ["dependabot[bot]","dependabot-preview[bot]"]
+    required: false
+
 runs:
   using: docker
   image: docker://ghcr.io/ahmadnassri/action-dependabot-auto-merge:2.6.6
