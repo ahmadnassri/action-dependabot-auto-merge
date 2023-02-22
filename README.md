@@ -88,7 +88,9 @@ steps:
 | `target`       | ❌       | `patch`                  | The version comparison target (major, minor, patch) |
 | `command`      | ❌       | `merge`                  | The command to pass to Dependabot                   |
 | `botName`      | ❌       | `dependabot`             | The bot to tag in approve/comment message.          |
-| `approve`      | ❌       | `true`                   | Auto-approve pull-requests                          |
+| `approve`      | ❌       | `true`                   | Auto-approve pull-requests (deprecated, use `strategy`) |
+| `strategy`     | ❌       | `approve-and-merge`      | Action to perform, possible values are `approve-and-merge`, `approve-only`, `merge-only`  |
+
 
 ### Token Scope
 
