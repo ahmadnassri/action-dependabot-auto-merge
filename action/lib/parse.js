@@ -5,7 +5,7 @@ import core from '@actions/core'
 
 const regex = {
   // semver regex
-  semver: /(?<version>(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)/,
+  semver: /(?<version>(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)(\.(?<patch>0|[1-9]\d*))?(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)/,
   // detect dependency name
   name: /(bump|update) (?<name>(?:@[^\s]+\/)?[^\s]+) (requirement)?/i,
   // detect dependency type from PR title
@@ -27,6 +27,14 @@ const weight = {
   patch: 1
 }
 
+function parseVersion(title, startPoint) {
+  const groups = title.match(new RegExp(startPoint + ' \\D*' + regex.semver.source))?.groups;
+  if (groups && groups.version && !groups.patch) {
+    groups.version = groups.major + '.' + groups.minor + '.0'
+  }
+  return groups;
+}
+
 export default function ({ title, labels = [], config = [], dependencies = {} }) {
   // log
   core.info(`title: "${title}"`)
@@ -42,8 +50,8 @@ export default function ({ title, labels = [], config = [], dependencies = {} })
   }
 
   // extract version from the title, allowing for constraints (~,^,>=) and v prefix
-  const from = title.match(new RegExp('from \\D*' + regex.semver.source))?.groups
-  const to = title.match(new RegExp('to \\D*' + regex.semver.source))?.groups
+  const from = parseVersion(title, 'from')
+  const to = parseVersion(title, 'to')
 
   if (!to) {
     core.warning('failed to parse title: no recognizable versions')
