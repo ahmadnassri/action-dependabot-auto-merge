@@ -21,7 +21,7 @@ jobs:
       repository_default_branch: ${{ steps.metadata.outputs.repository_default_branch }}
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
 
       - id: metadata
         uses: ahmadnassri/action-metadata@v2.1.2
@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
 
       - uses: ahmadnassri/action-commit-lint@v2.0.12
         with:
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
 
       - uses: oxsecurity/megalinter/flavors/javascript@v6.15.0
         env:
@@ -86,7 +86,7 @@ jobs:
       version-minor: ${{ steps.release.outputs.release-version-minor }}
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
         with:
           submodules: true
 
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
       - uses: docker/setup-qemu-action@v2
       - uses: docker/setup-buildx-action@v2
 
@@ -178,7 +178,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
 
       - uses: ahmadnassri/action-template-repository-sync@v2
         with:
