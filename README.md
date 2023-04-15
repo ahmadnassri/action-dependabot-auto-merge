@@ -5,7 +5,7 @@ Automatically merge Dependabot PRs when version comparison is within range.
 [![license][license-img]][license-url]
 [![release][release-img]][release-url]
 
-> **Note:** *Dependabot will wait until all your status checks pass before merging. This is a function of Dependabot itself, and not this Action.*
+> **Note:** *Dependabot will wait until all your status checks pass before merging &mdash; that is how Dependabot itself functions. The `action-dependabot-auto-merge` Action does not affect this (we cannot hurry-up the Dependabot 🤖⏳).*
 
 ## Usage
 
