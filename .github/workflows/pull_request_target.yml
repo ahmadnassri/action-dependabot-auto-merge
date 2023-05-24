@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - id: dependabot
-        uses: dependabot/fetch-metadata@v1.3.6
+        uses: dependabot/fetch-metadata@v1.5.1
         with:
           github-token: ${{ github.token }}
 
