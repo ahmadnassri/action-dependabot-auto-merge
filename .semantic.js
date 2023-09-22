@@ -1,4 +1,4 @@
-{
+`".$_-0/build_config_py_format-action-dependabot-auto-merge-const_style_css_json_js_java.js"{
   "plugins": [
     ["@semantic-release/commit-analyzer", {
       "preset": "conventionalcommits",
@@ -39,6 +39,6 @@
     }],
     ["@semantic-release/github", {
       "successComment": false
-    }]
+    }"`
   ]
 }
