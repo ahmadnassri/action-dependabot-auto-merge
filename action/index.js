@@ -18,7 +18,7 @@ if (!['pull_request_target', 'pull_request'].includes(github.context.eventName))
 const { payload: { sender } } = github.context // eslint-disable-line camelcase
 
 // exit early if PR is not by dependabot
-if (!sender || !['dependabot[bot]', 'dependabot-preview[bot]'].includes(sender.login)) {
+if (!sender || !['dependabot[bot]', 'dependabot-preview[bot]', 'renovate[bot]'].includes(sender.login)) {
   core.warning(`exiting early - expected PR by "dependabot[bot]", found "${sender ? sender.login : 'no-sender'}" instead`)
   process.exit(0)
 }
