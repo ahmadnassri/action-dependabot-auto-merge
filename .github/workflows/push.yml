@@ -21,7 +21,7 @@ jobs:
       repository_default_branch: ${{ steps.metadata.outputs.repository_default_branch }}
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
 
       - id: metadata
         uses: ahmadnassri/action-metadata@v2.1.2
@@ -35,9 +35,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
 
-      - uses: ahmadnassri/action-commit-lint@v2.0.12
+      - uses: ahmadnassri/action-commit-lint@v2.1.8
         with:
           config: .github/linters/.commit-lint.yml
 
@@ -47,9 +47,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
 
-      - uses: oxsecurity/megalinter/flavors/javascript@v6.15.0
+      - uses: oxsecurity/megalinter/flavors/javascript@v7.0.3
         env:
           GITHUB_TOKEN: ${{ github.token }}
           MEGALINTER_CONFIG: .github/linters/.mega-linter.yml
@@ -86,12 +86,12 @@ jobs:
       version-minor: ${{ steps.release.outputs.release-version-minor }}
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
         with:
           submodules: true
 
       - id: release
-        uses: ahmadnassri/action-semantic-release@v2.1.13
+        uses: ahmadnassri/action-semantic-release@v2.2.3
         with:
           config: ${{ github.workspace }}/.semantic.json
         env:
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
       - uses: docker/setup-qemu-action@v2
       - uses: docker/setup-buildx-action@v2
 
@@ -123,7 +123,7 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
 
       # publish
-      - uses: docker/build-push-action@v3
+      - uses: docker/build-push-action@v4
         with:
           push: true
           cache-from: type=gha
@@ -178,7 +178,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3.2.0
+      - uses: actions/checkout@v3.5.2
 
       - uses: ahmadnassri/action-template-repository-sync@v2
         with:
