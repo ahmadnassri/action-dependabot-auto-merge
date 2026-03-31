@@ -155,7 +155,7 @@ jobs:
           - "v${{ needs.release.outputs.version-major }}.${{ needs.release.outputs.version-minor }}"
 
     steps:
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v8
         with:
           script: |
             const { data: { object: { sha } } } = await github.rest.git.getRef({ ...context.repo, ref: 'tags/${{ matrix.release }}' })
